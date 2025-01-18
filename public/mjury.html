@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Membres du Jury</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                        url('https://img.freepik.com/free-photo/empty-cinema-auditorium-with-red-seats_1217-3584.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-900 text-white">
+    <!-- En-tête -->
+    <header class="flex items-center justify-between bg-gray-900 p-4">
+      <div class="flex items-center space-x-2">
+        <img src="Cinema Logo Design Шаблон _ Премиум векторы.jpeg" alt="Logo" class="h-12">
+      </div>
+      <div class="text-center">
+        <h1 class="text-3xl text-white font-bold"> 🎬Gestion des Membres du Jury 🎬</h1>
+      </div>
+      <div>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Flag_of_Tunisia.svg" alt="Drapeau de la Tunisie" class="w-12 h-8">
+      </div>
+    </header>
+
+    <div class="container mx-auto px-6">
+        <!-- Formulaire d'enregistrement -->
+        <form id="jury-form" class="space-y-6 bg-gray-100 p-6 rounded-lg shadow-md">
+            <h2 class="text-4xl font-semibold text-red-500 mb-10 text-center">Enregistrement des Membres du Jury</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Code du jury -->
+                <div>
+                    <label for="code" class="block text-xl font-medium text-gray-800">Code du Jury</label>
+                    <input type="text" id="code" name="code" required
+                        class="mt-2 block w-full rounded-md border-gray-600 bg-gray-800 text-white shadow-sm focus:border-red-500 focus:ring-red-500 px-4 py-3">
+                    <div id="error-code" class="text-red-500 text-sm mt-1"></div>
+                </div>
+
+           
+                <div>
+                    <label for="nom" class="block text-xl font-medium text-gray-800">Nom</label>
+                    <input type="text" id="nom" name="nom" required
+                        class="mt-2 block w-full rounded-md border-gray-600 bg-gray-800 text-white shadow-sm focus:border-red-500 focus:ring-red-500 px-4 py-3">
+                </div>
+
+                
+                <div>
+                    <label for="prenom" class="block text-xl font-medium text-gray-800">Prénom</label>
+                    <input type="text" id="prenom" name="prenom" required
+                        class="mt-2 block w-full rounded-md border-gray-600 bg-gray-800 text-white shadow-sm focus:border-red-500 focus:ring-red-500 px-4 py-3">
+                </div>
+
+                
+                <div>
+                    <label for="date_naissance" class="block text-xl font-medium text-gray-800">Date de Naissance</label>
+                    <input type="date" id="date_naissance" name="date_naissance" required
+                        class="mt-2 block w-full rounded-md border-gray-600 bg-gray-800 text-white shadow-sm focus:border-red-500 focus:ring-red-500 px-4 py-3">
+                </div>
+
+                
+                <div class="md:col-span-2">
+                    <label for="nationalite" class="block text-xl font-medium text-gray-800">Nationalité</label>
+                    <select id="nationalite" name="nationalite" required
+                        class="mt-2 block w-full rounded-md border-gray-600 bg-gray-800 text-white shadow-sm focus:border-red-500 focus:ring-red-500 px-4 py-3">
+                        <option value="">Sélectionnez une nationalité</option>
+                        <option value="Allemande">Allemande</option>
+                        <option value="Algérienne">Algérienne</option>
+                        <option value="Américaine">Américaine</option>
+                        <option value="Argentine">Argentine</option>
+                        <option value="Australienne">Australienne</option>
+                        <option value="Belge">Belge</option>
+                        <option value="Brésilienne">Brésilienne</option>
+                        <option value="Britannique">Britannique</option>
+                        <option value="Canadienne">Canadienne</option>
+                        <option value="Chinoise">Chinoise</option>
+                        <option value="Égyptienne">Égyptienne</option>
+                        <option value="Espagnole">Espagnole</option>
+                        <option value="Française">Française</option>
+                        <option value="Grecque">Grecque</option>
+                        <option value="Indienne">Indienne</option>
+                        <option value="Italienne">Italienne</option>
+                        <option value="Japonaise">Japonaise</option>
+                        <option value="Marocaine">Marocaine</option>
+                        <option value="Mexicaine">Mexicaine</option>
+                        <option value="Nigériane">Nigériane</option>
+                        <option value="Portugaise">Portugaise</option>
+                        <option value="Russe">Russe</option>
+                        <option value="Sénégalaise">Sénégalaise</option>
+                        <option value="Sud-africaine">Sud-africaine</option>
+                        <option value="Suisse">Suisse</option>
+                        <option value="Tunisienne">Tunisienne</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Bouton de soumission -->
+            <div class="mt-10">
+                <button type="submit"
+                    class="w-full bg-red-600 text-white py-4 px-6 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-200">
+                    Enregistrer
+                </button>
+            </div>
+        </form>
+
+        <!-- Liste des jurys -->
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl font-semibold text-red-500 mb-8 text-center underline">Liste des Membres du Jury</h2>
+            <div id="jury-list" class="space-y-6">
+                <!-- La liste des jurys sera insérée ici dynamiquement -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('input').forEach(input => {
+    input.addEventListener('input', (event) => {
+        if (event.target.value) {
+            event.target.style.color = 'orange'; 
+        } else {
+            event.target.style.color = 'white'; 
+        }
+    });
+});
+
+ // Tableau pour stocker les jurys localement
+ let jurys = [];
+
+// Fonction pour formater la date
+function formatDate(dateString) {
+    return new Date(dateString).toLocaleDateString('fr-FR');
+}
+
+// Fonction pour afficher la liste des jurys
+function displayJurys() {
+    const juryList = document.getElementById('jury-list');
+    juryList.innerHTML = '';
+
+    jurys.forEach((jury, index) => {
+        const juryCard = document.createElement('div');
+        juryCard.className = 'bg-white p-4 rounded-lg shadow-md';
+        juryCard.innerHTML = `
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                <div>
+                    <p class="text-sm text-gray-600">Code</p>
+                    <p class="font-medium">${jury.code}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Nom</p>
+                    <p class="font-medium">${jury.nom}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Prénom</p>
+                    <p class="font-medium">${jury.prenom}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Date de Naissance</p>
+                    <p class="font-medium">${formatDate(jury.date_naissance)}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-600">Nationalité</p>
+                    <p class="font-medium">${jury.nationalite}</p>
+                </div>
+            </div>
+            <div class="mt-4 flex space-x-2">
+                <button onclick="deleteJury('${jury.code}')" 
+                    class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                    Supprimer
+                </button>
+                <button onclick="editJury('${jury.code}')"
+                    class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+                    Modifier
+                </button>
+            </div>
+        `;
+        juryList.appendChild(juryCard);
+    });
+}
+
+// Gestionnaire de soumission du formulaire
+document.getElementById('jury-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const juryData = {
+        code: document.getElementById('code').value,
+        nom: document.getElementById('nom').value,
+        prenom: document.getElementById('prenom').value,
+        date_naissance: document.getElementById('date_naissance').value,
+        nationalite: document.getElementById('nationalite').value
+    };
+
+    try {
+        const response = await fetch('/jury', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(juryData)
+        });
+
+        if (!response.ok) {
+            throw new Error('Erreur lors de l\'enregistrement');
+        }
+
+        // Ajouter le nouveau jury au tableau local
+        jurys.push(juryData);
+        
+        // Actualiser l'affichage
+        displayJurys();
+        
+        // Réinitialiser le formulaire
+        this.reset();
+        
+        alert('Membre du jury enregistré avec succès !');
+
+    } catch (error) {
+        console.error('Erreur:', error);
+        alert('Erreur lors de l\'enregistrement: ' + error.message);
+    }
+});
+
+// Fonction pour charger les jurys depuis le serveur
+async function loadJurys() {
+    try {
+        const response = await fetch('/jury');
+        if (!response.ok) {
+            throw new Error('Erreur lors du chargement des données');
+        }
+        const data = await response.json();
+        jurys = data;
+        displayJurys();
+    } catch (error) {
+        console.error('Erreur:', error);
+        alert('Erreur lors du chargement des jurys: ' + error.message);
+    }
+}
+
+// Fonction pour supprimer un jury
+async function deleteJury(code) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce membre du jury ?')) {
+        try {
+            const response = await fetch(`/jury/${code}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la suppression');
+            }
+
+            // Retirer le jury du tableau local
+            jurys = jurys.filter(jury => jury.code !== code);
+            
+            // Actualiser l'affichage
+            displayJurys();
+            
+            alert('Membre du jury supprimé avec succès !');
+
+        } catch (error) {
+            console.error('Erreur:', error);
+            alert('Erreur lors de la suppression: ' + error.message);
+        }
+    }
+}
+
+// Fonction pour éditer un jury
+function editJury(code) {
+    const jury = jurys.find(j => j.code === code);
+    if (jury) {
+        // Remplir le formulaire avec les données existantes
+        document.getElementById('code').value = jury.code;
+        document.getElementById('nom').value = jury.nom;
+        document.getElementById('prenom').value = jury.prenom;
+        document.getElementById('date_naissance').value = jury.date_naissance;
+        document.getElementById('nationalite').value = jury.nationalite;
+        
+        // Faire défiler jusqu'au formulaire
+        document.getElementById('jury-form').scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+// Charger les jurys au chargement de la page
+document.addEventListener('DOMContentLoaded', loadJurys);
+
+    </script>
+</body>
+</html>

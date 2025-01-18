@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Gestion du Planning</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+    <!-- Barre de navigation -->
+    <nav class="bg-gray-800 text-white">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Administrateur</h1>
+            <ul class="flex space-x-4">
+                <li>
+                    <a href="admin.html" class="hover:underline text-xl">Utilisateurs</a>
+                </li>
+                <li>
+                    <a href="admin jury.html" class="hover:underline text-xl">Membres du Jury</a>
+                </li>
+                <li>
+                    <a href="admin notes.html" class="hover:underline text-xl">Notes</a>
+                </li>
+                <li>
+                    <a href="adminplanning.html" class="hover:underline text-xl text-red-800">Planning</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mx-auto py-10 px-4">
+        <h1 class="text-3xl font-bold bg-gray-600 text-white mb-8 text-center py-2">Gestion du Planning</h1>
+
+        <div class="overflow-x-auto bg-white shadow-md rounded-lg mb-8">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase">ID</th>
+                        <th class="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase">Code Film</th>
+                        <th class="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase">Heure Projection</th>
+                        <th class="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase">Date Projection</th>
+                        <th class="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase">Salle</th>
+                        <th class="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase">Jury 1</th>
+                        <th class="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase">Jury 2</th>
+                        <th class="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase">Jury 3</th>
+                    </tr>
+                </thead>
+                <tbody id="planning-table" class="bg-white divide-y divide-gray-200">
+                    <!-- Les éléments de planning seront insérés ici -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const planningTableBody = document.getElementById('planning-table');
+
+            async function fetchPlanning() {
+                try {
+                    const response = await fetch('/admin/planning', { method: 'GET' });
+
+                    if (!response.ok) {
+                        throw new Error('Erreur lors de la récupération du planning');
+                    }
+
+                    const planningItems = await response.json();
+                    planningTableBody.innerHTML = '';
+
+                    planningItems.forEach(item => {
+                        const row = document.createElement('tr');
+                        row.className = 'hover:bg-gray-50';
+                        row.innerHTML = `
+                            <td class="px-6 py-4">${item.id}</td>
+                            <td class="px-6 py-4">${item.code_film}</td>
+                            <td class="px-6 py-4">${item.heure_projection}</td>
+                            <td class="px-6 py-4">${new Date(item.date_projection).toLocaleDateString('fr-FR')}</td>
+                            <td class="px-6 py-4">${item.salle}</td>
+                            <td class="px-6 py-4">${item.jury1}</td>
+                            <td class="px-6 py-4">${item.jury2}</td>
+                            <td class="px-6 py-4">${item.jury3}</td>
+                        `;
+                        planningTableBody.appendChild(row);
+                    });
+
+                } catch (error) {
+                    console.error('Erreur:', error);
+                }
+            }
+
+            fetchPlanning();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire d'inscription</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <style>
+         body {
+            background-image: url(les-films-incontournables-du-cinema-w_2524x884.jpg); 
+            background-size: cover;
+            background-position: center;
+        }
+        .form-container {
+            background-image: url(imagefilm/Salle-1_vue-du-haut_cote-1-9369c8f0.png);
+            backdrop-filter: blur(10px); /* Effet de flou */
+        }
+        h1 {
+            background-image: url(imagefilm/images.jpg);
+            background-size: cover;
+            color: transparent; 
+            text-align: center;
+            padding: 20px;
+            font-size: 2rem;
+            font-weight: bold;
+            background-clip: text; /* Appliquer l'image en arrière-plan uniquement sur le texte */
+            -webkit-background-clip: text; 
+        }
+    </style>
+
+    <div class="form-container p-8 shadow-lg w-full max-w-2xl">
+        <h1>S'inscrire</h1>
+        <form id="registrationForm" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="nom" class="block text-xl font-medium text-gray-100">Nom</label>
+                    <input type="text" id="nom" name="nom" placeholder="Entrez votre nom"  class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-600" required>
+                    <div id="errorNom" class="text-red-500 text-sm hidden">Nom invalide.</div>
+                </div>
+                <div>
+                    <label for="prenom" class="block text-xl font-medium text-gray-100">Prénoms</label>
+                    <input type="text" id="prenom" name="prenom" placeholder="Entrez votre prenom" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-600" required>
+                    <div id="errorPrenom" class="text-red-500 text-sm hidden">Prénom invalide.</div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="email" class="block text-xl font-medium text-gray-100">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Entrez l 'email" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-600" required>
+                    <div id="errorEmail" class="text-red-500 text-sm hidden">Email invalide.</div>
+                </div>
+                <div>
+                    <label for="username" class="block text-xl font-medium text-gray-100">Nom d'utilisateur</label>
+                    <input type="text" id="username" name="username"  placeholder="Entrez le nom dutilisateur" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-600" required>
+                    <div id="errorUsername" class="text-red-500 text-sm hidden">Nom d'utilisateur invalide.</div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="password" class="block text-xl font-medium text-gray-100">Mot de passe</label>
+                    <input type="password" id="mot_de_passe" name="password" placeholder="Entrez le mot de passe" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-600" required>
+                    <div id="errorPassword" class="text-red-500 text-sm hidden">Mot de passe trop court.</div>
+                </div>
+                <div>
+                    <label for="confirmPassword" class="block text-xl font-medium text-gray-100">Confirmation</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirmer vôtre mot de passe" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-600" required>
+                    <div id="errorConfirmPassword" class="text-red-500 text-sm hidden">Les mots de passe ne correspondent pas.</div>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <button id="submitButton" type="submit" class="w-full py-2 bg-gray-500 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-red-800 transition" disabled>CONTINUER</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const nomInput = document.getElementById('nom');
+        const prenomInput = document.getElementById('prenom');
+        const emailInput = document.getElementById('email');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('mot_de_passe');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const submitButton = document.getElementById('submitButton');
+
+      const validateForm = () => {
+    let isValid = true;
+
+const showError = (id, condition) => {
+    const errorElement = document.getElementById(id);
+    if (condition) {
+        errorElement.classList.remove('hidden');
+        isValid = false;
+    } else {
+        errorElement.classList.add('hidden');
+    }
+};
+
+const namePattern = /^[A-Za-zÀ-ÖØ-öø-ÿ'-]+(?:\s[A-Za-zÀ-ÖØ-öø-ÿ'-]+)*$/; // Autorise plusieurs prénoms
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Nettoyer les espaces inutiles avant validation
+const cleanInput = (input) => input.trim().replace(/\s+/g, ' ');
+
+const nom = cleanInput(nomInput.value);
+const prenom = cleanInput(prenomInput.value);
+
+showError('errorNom', !namePattern.test(nom));
+showError('errorPrenom', !namePattern.test(prenom));
+showError('errorEmail', !emailPattern.test(emailInput.value.trim()));
+showError('errorUsername', usernameInput.value.trim().length < 5);
+showError('errorPassword', passwordInput.value.trim().length < 6);
+showError('errorConfirmPassword', passwordInput.value !== confirmPasswordInput.value);
+
+submitButton.disabled = !isValid;
+
+if (isValid) {
+    submitButton.classList.remove('bg-gray-500');
+    submitButton.classList.add('bg-red-600');
+} else {
+    submitButton.classList.remove('bg-red-600');
+    submitButton.classList.add('bg-gray-500');
+}
+};
+
+
+        [nomInput, prenomInput, emailInput, usernameInput, passwordInput, confirmPasswordInput].forEach(input => {
+            input.addEventListener('input', validateForm);
+        });
+        localStorage.setItem("username", username);
+
+        document.getElementById('registrationForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!submitButton.disabled) {
+        const data = {
+            nom: nomInput.value.trim(),
+            prenom: prenomInput.value.trim(),
+            email: emailInput.value.trim(),
+            username: usernameInput.value.trim(),
+            mot_de_passe: passwordInput.value.trim(),
+        };
+
+        try {
+            submitButton.innerHTML = "Inscription en cours...";
+            submitButton.disabled = true;
+            
+            const response = await fetch('/loginForm', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+            
+            if (response.ok) {
+                // Stockage dans localStorage si nécessaire
+                localStorage.setItem('username', data.username);
+                
+                // Attendre un peu avant la redirection
+                setTimeout(() => {
+                    if (result.redirectTo) {
+                        window.location.replace(result.redirectTo);
+                    } else {
+                        window.location.replace('/accueil.html');
+                    }
+                }, 1000); // délai d'1 seconde pour être sûr que la session est bien initialisée
+                
+            } else {
+                alert(result.message || "Erreur lors de l'inscription");
+                submitButton.disabled = false;
+            }
+        } catch (error) {
+            console.error('Erreur lors de la requête:', error);
+            alert('Une erreur est survenue, veuillez réessayer plus tard.');
+            submitButton.disabled = false;
+        } finally {
+            submitButton.innerHTML = "CONTINUER";
+        }
+    }
+});
+    </script>
+</body>
+</html>

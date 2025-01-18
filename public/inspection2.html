@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsable d'inspection</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <header class="flex items-center justify-between bg-gray-900 p-4">
+    <div class="flex items-center space-x-2">
+      <img src="Cinema Logo Design Шаблон _ Премиум векторы.jpeg" alt="Logo" class="h-12">
+    </div>
+    <div class="text-center">
+      <h1 class="text-3xl text-white font-bold">Planning des Films</h1>
+    </div>
+    <div>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Flag_of_Tunisia.svg" alt="Drapeau de la Tunisie" class="w-12 h-8">
+    </div>
+  </header>
+  <h1 class="text-3xl font-bold text-center text-red-800 mb-6">Enregistrement des Documentaires(Films)</h1>
+  
+  <!-- Formulaire d'ajout de documentaire -->
+  <form id="document-form" class="space-y-6 bg-gray-100 p-6 rounded-lg shadow-md">
+    <h3 class="text-xl font-semibold text-gray-800 mt-4">Entrez les coordonnées du film</h3>
+
+    <div>
+      <label for="codeDoc" class="block text-sm font-medium text-gray-700">Code-film</label>
+      <input type="text" id="code_film" name="codeDoc" class="mt-2 w-full p-3 rounded-md border border-gray-300" required>
+      <div id="error-code_film" class="text-red-500 text-sm mt-1"></div>
+    </div>
+
+    <div>
+      <label for="titreDoc" class="block text-sm font-medium text-gray-700">Titre</label>
+      <input type="text" id="titre_film" name="titreDoc" class="mt-2 w-full p-3 rounded-md border border-gray-300" required>
+    </div>
+
+    <div>
+      <label for="dateDoc" class="block text-sm font-medium text-gray-700">Date de Production</label>
+      <input type="date" id="date_production_film" name="dateDoc" class="mt-2 w-full p-3 rounded-md border border-gray-300" required>
+    </div>
+
+    <div>
+      <label for="sujetDoc" class="block text-sm font-medium text-gray-700">Sujet</label>
+      <textarea id="sujet_film" name="sujetDoc" rows="4" class="mt-2 w-full p-3 rounded-md border border-gray-300" required></textarea>
+    </div>
+
+    <!-- Formulaire Réalisateur -->
+    <h3 class="text-xl font-semibold text-gray-800 mt-4">Entrez les coordonnées du Réalisateur</h3>
+    <div>
+      <label for="codeRealisateur" class="block text-sm font-medium text-gray-700">Code Réalisateur</label>
+      <input type="text" id="code_realisateur" name="codeRealisateur" class="mt-2 w-full p-3 rounded-md border border-gray-300" required>
+      <div id="error-code_realisateur" class="text-red-500 text-sm mt-1"></div>
+    </div>
+    
+    <div>
+      <label for="nomRealisateur" class="block text-sm font-medium text-gray-700">Nom</label>
+      <input type="text" id="nom_realisateur" name="nomRealisateur" class="mt-2 w-full p-3 rounded-md border border-gray-300" required>
+    </div>
+
+    <div>
+      <label for="prenomRealisateur" class="block text-sm font-medium text-gray-700">Prénom</label>
+      <input type="text" id="prenom_realisateur" name="prenomRealisateur" class="mt-2 w-full p-3 rounded-md border border-gray-300" required>
+    </div>
+
+    <div>
+      <label for="naissanceRealisateur" class="block text-sm font-medium text-gray-700">Date de Naissance</label>
+      <input type="date" id="date_naissance_realisateur" name="naissanceRealisateur" class="mt-2 w-full p-3 rounded-md border border-gray-300" required>
+    </div>
+
+    <!-- Formulaire Producteur -->
+    <h3 class="text-xl font-semibold text-gray-800 mt-4">Entrez les coordonnées du Producteur</h3>
+    <div>
+      <label for="codeProducteur" class="block text-sm font-medium text-gray-700">Code Producteur</label>
+      <input type="text" id="code_producteur" name="codeProducteur" class="mt-2 w-full p-3 rounded-md border border-gray-300" required>
+      <div id="error-code_producteur" class="text-red-500 text-sm mt-1"></div>
+    </div>
+
+    <div>
+      <label for="nomProducteur" class="block text-sm font-medium text-gray-700">Nom</label>
+      <input type="text" id="nom_producteur" name="nomProducteur" class="mt-2 w-full p-3 rounded-md border border-gray-300" required>
+    </div>
+
+    <div>
+      <label for="prenomProducteur" class="block text-sm font-medium text-gray-700">Prénom</label>
+      <input type="text" id="prenom_producteur" name="prenomProducteur" class="mt-2 w-full p-3 rounded-md border border-gray-300" required>
+    </div>
+
+    <div>
+      <label for="naissanceProducteur" class="block text-sm font-medium text-gray-700">Date de Naissance</label>
+      <input type="date" id="date_naissance_producteur" name="naissanceProducteur" class="mt-2 w-full p-3 rounded-md border border-gray-300" required>
+    </div>
+
+    <button type="submit" class="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-700">Enregistrer</button>
+  </form>
+
+  <!-- Section d'affichage des résultats -->
+  <div id="result-section" class="mt-8">
+    <h2 class="text-2xl font-semibold text-red-800 mb-4">Films enregistrés</h2>
+    <div id="result-content" class="space-y-4">
+      <!-- Les résultats seront affichés ici -->
+    </div>
+  </div>
+  
+  <footer class="bg-gray-800 text-white py-4 mt-12">
+    <div class="container mx-auto text-center">
+      <p class="text-sm">&copy; 2024 DOC A TUNIS (Festival de Films Documentaires)</p>
+    </div>
+  </footer>
+  
+  <script>
+    // Charger les films depuis le localStorage
+    let documents = JSON.parse(localStorage.getItem('films')) || [];
+
+    // Enregistrer un film
+    document.getElementById('document-form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const data = {
+        code_film: document.getElementById('code_film').value,
+        titre_film: document.getElementById('titre_film').value,
+        date_production_film: document.getElementById('date_production_film').value,
+        sujet_film: document.getElementById('sujet_film').value,
+        code_realisateur: document.getElementById('code_realisateur').value,
+        nom_realisateur: document.getElementById('nom_realisateur').value,
+        prenom_realisateur: document.getElementById('prenom_realisateur').value,
+        date_naissance_realisateur: document.getElementById('date_naissance_realisateur').value,
+        code_producteur: document.getElementById('code_producteur').value,
+        nom_producteur: document.getElementById('nom_producteur').value,
+        prenom_producteur: document.getElementById('prenom_producteur').value,
+        date_naissance_producteur: document.getElementById('date_naissance_producteur').value,
+      };
+
+      // Sauvegarder localement
+      documents.push(data);
+      localStorage.setItem('films', JSON.stringify(documents));
+      displayDocuments();
+      document.getElementById('document-form').reset();
+
+      // Envoyer les données au backend
+      try {
+        const response = await fetch('/inspection', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Erreur HTTP: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log('Réponse du serveur:', result);
+      } catch (error) {
+        console.error('Erreur lors de l\'envoi au backend:', error);
+        alert('Erreur lors de l\'envoi au backend. Les données ont été sauvegardées localement.');
+      }
+    });
+
+    // Afficher les films
+    function formatDate(dateString) {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0'); // Jour sur 2 chiffres
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Mois sur 2 chiffres
+  const year = date.getFullYear(); // Année sur 4 chiffres
+  return `${day}-${month}-${year}`;
+}
+function formatDate(dateString) {
+  if (!dateString) return 'Non spécifiée'; // Retourne une valeur par défaut si la date est manquante
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return 'Date invalide'; // Retourne une valeur par défaut si la date est invalide
+  const day = String(date.getDate()).padStart(2, '0'); // Jour sur 2 chiffres
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Mois sur 2 chiffres
+  const year = date.getFullYear(); // Année sur 4 chiffres
+  return `${day}-${month}-${year}`;
+}
+
+function displayDocuments() {
+  const resultContent = document.getElementById('result-content');
+  resultContent.innerHTML = '';
+
+  documents.forEach((doc, index) => {
+    const documentItem = document.createElement('div');
+    documentItem.classList.add('bg-gray-100', 'p-4', 'rounded-lg', 'shadow-md', 'mb-4');
+
+    // Formater les dates
+    const formattedDateProduction = formatDate(doc.date_production_film);
+    const formattedDateNaissanceRealisateur = formatDate(doc.date_naissance_realisateur);
+    const formattedDateNaissanceProducteur = formatDate(doc.date_naissance_producteur);
+
+    // Afficher les données dans la console pour déboguer
+    console.log('Données du film:', doc);
+
+    documentItem.innerHTML = `
+      <div class="space-y-2">
+        <h4 class="font-semibold text-red-800 text-lg">Film ${index + 1}</h4>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <h5 class="font-semibold text-gray-700">Informations du film</h5>
+            <p><strong>Code :</strong> ${doc.code_film}</p>
+            <p><strong>Titre :</strong> ${doc.titre_film}</p>
+            <p><strong>Date de Production :</strong> ${formattedDateProduction}</p>
+            <p><strong>Sujet :</strong> ${doc.sujet_film}</p>
+          </div>
+
+          <div>
+            <h5 class="font-semibold text-gray-700">Réalisateur</h5>
+            <p><strong>Code :</strong> ${doc.code_realisateur}</p>
+            <p><strong>Nom :</strong> ${doc.nom_realisateur || 'Non spécifié'}</p>
+            <p><strong>Prénom :</strong> ${doc.prenom_realisateur || 'Non spécifié'}</p>
+            <p><strong>Date de Naissance :</strong> ${formattedDateNaissanceRealisateur}</p>
+          </div>
+
+          <div>
+            <h5 class="font-semibold text-gray-700">Producteur</h5>
+            <p><strong>Code :</strong> ${doc.code_producteur}</p>
+            <p><strong>Nom :</strong> ${doc.nom_producteur || 'Non spécifié'}</p>
+            <p><strong>Prénom :</strong> ${doc.prenom_producteur || 'Non spécifié'}</p>
+            <p><strong>Date de Naissance :</strong> ${formattedDateNaissanceProducteur}</p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    resultContent.appendChild(documentItem);
+  });
+}
+
+    // Charger les films au démarrage de la page
+    displayDocuments();
+  </script>
+</body>
+</html>

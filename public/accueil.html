@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accueil - Festival de Films</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+  <nav class="bg-gray-800 text-white p-4">
+    <div class="container mx-auto flex items-center">
+      <!-- Logo et Titre avec Navigation -->
+      <div class="flex items-center space-x-6">
+        <!-- Logo -->
+        <img src="Cinema Logo Design Шаблон _ Премиум векторы.jpeg" alt="Logo du festival" class="h-10 w-auto">
+        <!-- Titre et Navigation -->
+        <div class="flex items-center space-x-20">
+          <!-- Titre -->
+          <h1 class="text-3xl font-bold max-w-fit">Doc à Tunis</h1>    
+          <!-- Navigation -->
+          <ul class="flex space-x-6">
+            <li>
+              <a href="accueil.html" class="hover:underline text-2xl text-red-500 hover:text-cyan-500 active:text-gray-800">
+                Accueil
+              </a>
+            </li>
+            <li>
+              <a href="films.html" class="hover:underline  text-2xl text-zinc-50 hover:text-cyan-600 active:text-gray-500">
+                Films
+              </a>
+            </li>
+            <li>
+              <a href="schedule.html" class="hover:underline text-2xl text-zinc-50 hover:text-cyan-500 active:text-gray-800">
+                Planning
+              </a>
+            </li>
+            <li>
+              <a href="jurys.html" class="hover:underline text-2xl text-zinc-50 hover:text-cyan-500 active:text-gray-800">
+                Jurys
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="ml-auto relative">
+        <div id="username-box" class="cursor-pointer px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600">Nom d'utilisateur</div>
+        <button id="logout-btn" class=" cursor-pointer px-4 py-1 bg-gray-600 text-white rounded-md hover:bg-red-700 hidden">Déconnexion</button>
+    </div>
+    </div>
+
+  </nav>
+  
+  
+
+  <!-- Carrousel -->
+  <div class="relative mt-4">
+    <div class="carousel">
+      <div class="w-full h-[500px]">
+        <img src="Karnou_vianney_Kouadio_des_images_de_films_de_festivals_en_format_1400_40_1c156b0d-3238-470b-8055-97c979d87ae8.png" alt="Slide 1" class="w-full h-full object-cover">
+      </div>
+      <div class="w-full h-[500px] hidden">
+        <img src="Karnou_vianney_Kouadio_des_images_de_films_de_festivals_en_format_1400_40_6aeb46da-b31a-4df2-9d6f-44f16b3d149f.png" alt="Slide 2" class="w-full h-full object-cover">
+      </div>
+      <div class="w-full h-[500px] hidden">
+        <img src="Karnou_vianney_Kouadio_des_images_de_films_de_festivals_en_format_1400_40_6d0fff6d-7074-4551-b83a-4d99c84c959f.png" alt="Slide 3" class="w-full h-full object-cover">
+      </div>
+    </div>
+    <!-- Boutons pour naviguer -->
+    <button id="prev" class="absolute left-0 top-1/2 -translate-y-1/2 bg-red-500 text-white p-2">◀</button>
+    <button id="next" class="absolute right-0 top-1/2 -translate-y-1/2 bg-red-500 text-white p-2">▶</button>
+  </div>
+
+  <!-- Description -->
+  <section id="DESCRIPTION" class="mt-8 p-4 bg-gray-200">
+    <h2 class="text-2xl font-bold"> <hr>DESCRIPTION</h2>
+    <p>Le festival Doc à Tunis met en lumière des films documentaires réalisés par des artistes internationaux et tunisiens. Ce festival offre une plateforme pour explorer les enjeux sociaux, environnementaux et culturels à travers le regard des cinéastes.</p>
+  </section>
+
+  <!-- Historique -->
+  <section id="historique" class="mt-8 p-4 flex space-x-4">
+    <div class="w-2/3">
+      <h2 class="text-2xl font-bold">Historique de l'événement</h2>
+      <ol class="list-decimal pl-4">
+        <li>2006 : Création de DOC à Tunis, avec pour objectif de promouvoir le cinéma documentaire en Tunisie et de donner une voix aux cinéastes émergents.</li>
+        <li>2008 : L'événement gagne en notoriété et attire des participants de plusieurs pays africains et méditerranéens.</li>
+        <li>2010 : Introduction des ateliers pour jeunes réalisateurs, visant à stimuler la création documentaire locale</li>
+        <li>2022 : Édition dédiée à la célébration des 15 ans du festival, avec des rétrospectives des œuvres primées des années précédentes.</li>
+      </ol>
+      <p class="">Le festival se déroule généralement dans des lieux emblématiques de Tunis comme la Cité de la Culture ou le Théâtre El Hamra, offrant une plateforme pour explorer des récits captivants et promouvoir des dialogues interculturels</p>
+      <p>
+        Pour plus d'informations, consultez <a href="https://www.tuniscope.com" class="text-red-500 underline">tuniscope.com</a>.
+      </p>
+    </div>
+    <div class="w-1/3">
+      <img src="Festival-International-du-Film-Amateur-Tunisie4-808x500.jpg" alt="Image historique" class="w-full h-auto rounded-lg shadow-lg">
+    </div>
+  </section>
+
+  <!-- Section À propos -->
+  <section id="about" class="mt-8 p-4 bg-gray-200">
+    <h2 class="text-2xl font-bold"> <hr>À propos</h2>
+    <p>Le festival Doc à Tunis est bien plus qu'une simple projection de films. C'est un véritable lieu de rencontres et d'échanges, où le public peut discuter avec les réalisateurs et les experts du secteur...</p>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-red-500 text-white mt-8 p-4">
+    <div class="container mx-auto">
+      <h2 class="text-xl font-bold underline"> nos Partenaires</h2>
+      <ul class="  flex justify-center space-x-4 mt-2">
+        <li>
+          <img src="images-removebg-preview.png" alt="Logo Partenaire 1" class="w-16 h-16">
+        </li>
+        <li>
+          <img src="images.png" alt="Logo Partenaire 2" class="w-16 h-16">
+        </li>
+        <li>
+          <img src="tunisair.png" alt="Logo Partenaire 3" class="w-16 h-16">
+        </li>
+      </ul>
+    </div>
+  </footer>
+
+  <script>
+    // JavaScript pour le carrousel
+    let currentIndex = 0;
+    const slides = document.querySelectorAll(".carousel div");
+    const totalSlides = slides.length;
+
+    document.getElementById("next").addEventListener("click", () => {
+      slides[currentIndex].classList.add("hidden");
+      currentIndex = (currentIndex + 1) % totalSlides;
+      slides[currentIndex].classList.remove("hidden");
+    });
+
+    document.getElementById("prev").addEventListener("click", () => {
+      slides[currentIndex].classList.add("hidden");
+      currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+      slides[currentIndex].classList.remove("hidden");
+    });
+   
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const usernameBox = document.getElementById('username-box');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    // Fonction pour vérifier la session
+    async function checkSession() {
+        try {
+            const response = await fetch('/check-session');
+            const data = await response.json();
+            
+            if (data.loggedIn) {
+                usernameBox.textContent = data.username;
+                return true;
+            } else {
+                window.location.href = 'login2.html'; // Redirection si non connecté
+                return false;
+            }
+        } catch (error) {
+            console.error('Erreur lors de la vérification de la session:', error);
+            return false;
+        }
+    }
+
+    // Vérifier la session au chargement
+    await checkSession();
+
+    // Gestionnaire pour le bouton de déconnexion
+    logoutBtn.addEventListener('click', async () => {
+        try {
+            const response = await fetch('/logout', {
+                method: 'POST'
+            });
+            
+            if (response.ok) {
+                localStorage.removeItem('username');
+                window.location.href = 'first.html';
+            }
+        } catch (error) {
+            console.error('Erreur lors de la déconnexion:', error);
+        }
+    });
+
+    // Afficher/cacher le bouton de déconnexion
+    usernameBox.addEventListener('click', () => {
+        usernameBox.classList.add('hidden');
+        logoutBtn.classList.remove('hidden');
+    });
+});
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,1 @@
+select count(*) as nombres from utilisateurs where role = 'user';

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Président du Jury</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-image: url(imagefilm/IN\ Tendance\ 170921.png);
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .transparent-form {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(1px);
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Header -->
+    <header class="bg-gray-900 text-white py-4">
+        <div class="container mx-auto flex justify-between items-center px-4">
+            <div class="flex items-center space-x-2">
+                <img src="Cinema Logo Design Шаблон _ Премиум векторы.jpeg" alt="Logo" class="h-12">
+            </div>
+            <h1 class="text-4xl text-red-800 font-bold">Gestion des Notes (Président du Jury)</h1>
+            <div>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Flag_of_Tunisia.svg" alt="Drapeau de la Tunisie" class="w-12 h-8">
+            </div>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="container mx-auto py-8 px-4">
+        <div class="max-w-2xl mx-auto">
+            <div class="p-8 rounded-lg shadow-lg mb-8">
+                <h1 class="text-3xl underline text-white font-bold mb-6 text-center">Note du Président du Jury</h1>
+                <form id="note-form" class="transparent-form">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <label for="filmCode" class="block text-2xl font-bold mb-2">Code du film</label>
+                            <input type="text" id="filmCode" name="filmCode" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
+                        </div>
+                        <div>
+                            <label for="filmTitle" class="block text-2xl font-bold mb-2">Titre du film</label>
+                            <input type="text" id="filmTitle" name="filmTitle" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
+                        </div>
+                        <div>
+                            <label for="juryCode" class="block text-2xl font-bold mb-2">Code du jury</label>
+                            <input type="text" id="juryCode" name="juryCode" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
+                        </div>
+                        <div>
+                            <label for="note" class="block text-2xl font-bold mb-2">Note</label>
+                            <input type="number" id="note" name="note" min="1" max="10" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
+                        </div>
+                    </div>
+                    <div class="flex justify-center">
+                        <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 font-bold">
+                            Soumettre
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Notes display section -->
+            <div id="notes-container" class="space-y-4"></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4 mt-auto">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 DOC A TUNIS (Festival de Films Documentaires)</p>
+        </div>
+    </footer>
+
+    <script>
+        let notes = JSON.parse(localStorage.getItem('notes')) || [];
+        let isEditing = false;
+        let currentFilmCode = null;
+
+        function displayNotes() {
+            const notesContainer = document.getElementById('notes-container');
+            notesContainer.innerHTML = ''; // Clear previous notes
+
+            notes.forEach((note, index) => {
+                const noteCard = document.createElement('div');
+                noteCard.className ='bg-white shadow-md rounded-lg p-6 flex flex-col';
+                noteCard.innerHTML = `
+                
+                    <p><strong>Code du film:</strong> ${note.code_film}</p>
+                    <p><strong>Titre du film:</strong> ${note.titre_film}</p>
+                    <p><strong>Code du jury:</strong> ${note.code_jury}</p>
+                    <p><strong>Note:</strong> ${note.note}</p>
+                    <button class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600" onclick="editNote(${index})">Modifier</button>
+                    <button class="mt-2 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600" onclick="deleteNote(${index})">Supprimer</button>
+                  
+                `;
+                notesContainer.appendChild(noteCard);
+            });
+        }
+
+        function editNote(index) {
+            const noteToEdit = notes[index];
+            document.getElementById('filmCode').value = noteToEdit.code_film;
+            document.getElementById('filmTitle').value = noteToEdit.titre_film;
+            document.getElementById('juryCode').value = noteToEdit.code_jury;
+            document.getElementById('note').value = noteToEdit.note;
+
+            isEditing = true;
+            currentFilmCode = noteToEdit.code_film;
+        }
+
+        function deleteNote(index) {
+            notes.splice(index, 1); // Supprime la note du tableau local
+            localStorage.setItem('notes', JSON.stringify(notes)); // Met à jour localStorage
+            displayNotes(); // Actualise l'affichage
+        }
+
+        // Charger les notes au chargement de la page
+        document.addEventListener('DOMContentLoaded', displayNotes);
+
+        // Gestionnaire de soumission du formulaire
+document.getElementById('note-form').addEventListener('submit', async function (e) {
+  e.preventDefault();
+
+  const noteData = {
+    code_film: document.getElementById('filmCode').value,
+    titre_film: document.getElementById('filmTitle').value,
+    code_jury: document.getElementById('juryCode').value,
+    note: document.getElementById('note').value,
+  };
+
+  try {
+    let response;
+    if (isEditing) {
+      // Appeler la route PUT pour la mise à jour
+      const response = await fetch(`/notes/${code_film}/${code_jury}`, {
+  method: 'UPDATE',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ note }),
+});
+
+
+    } else {
+      // Appeler la route POST pour l'ajout
+      response = await fetch('/notes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(noteData),
+      });
+    }
+
+    if (!response.ok) {
+      throw new Error('Erreur lors de l\'enregistrement');
+    }
+
+    const savedNote = await response.json();
+
+    if (isEditing) {
+      // Mettre à jour la note dans le tableau local
+      const index = notes.findIndex(
+        (n) => n.code_film === currentFilmCode && n.code_jury === noteData.code_jury
+      );
+      notes[index] = savedNote;
+      isEditing = false;
+      currentFilmCode = null;
+    } else {
+      // Ajouter une nouvelle note au tableau local
+      notes.push(savedNote);
+    }
+
+    localStorage.setItem('notes', JSON.stringify(notes)); // Sauvegarder dans le localStorage
+    displayNotes(); // Actualiser l'affichage
+    e.target.reset(); // Réinitialiser le formulaire
+    alert('Opération réussie !');
+  } catch (error) {
+    console.error('Erreur:', error);
+    alert('Erreur lors de l\'enregistrement : ' + errorResponse.details || error.message);
+
+  }
+});
+
+    </script>
+</body>
+</html>

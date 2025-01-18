@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Gestion des utilisateurs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+    <!-- Barre de navigation -->
+    <nav class="bg-gray-800 text-white">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Administrateur</h1>
+            <ul class="flex space-x-4">
+                <li>
+                    <a href="admin.html" class="hover:underline   text-xl">Utilisateurs</a>
+                </li>
+                <li>
+                    <a href="admin jury.html " class="hover:underline   text-xl">Membres du Jury</a>
+                </li>
+                <li>
+                    <a href="admin notes.html" class="hover:underline  text-xl text-red-800">Notes</a>
+                </li>
+                <li>
+                    <a href="adminplanning.html" class="hover:underline  text-xl text">Planning</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   
+<div class="container mx-auto py-10 px-4">
+        <h1 class="text-3xl font-bold bg-gray-600 text-white mb-8 text-center py-2">Gestion des Membres des notes</h1>
+    <div class="overflow-x-auto bg-white shadow-md rounded-lg">
+        <!-- Loading spinner -->
+        <div id="loading" class="text-center py-4">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+        </div>
+
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase">ID</th>
+                    <th class="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase">Code Film</th>
+                    <th class="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase">Code </th>
+                    <th class="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase">note</th>
+
+                    <th class="px-6 py-3 text-left text-xl font-medium text-gray-500 uppercase">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="jury-table" class="bg-white divide-y divide-gray-200">
+                <!-- Les membres du jury seront insérés ici -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const juryTableBody = document.getElementById('jury-table');
+        const loadingElement = document.getElementById('loading');
+
+        async function fetchJury() {
+            loadingElement.style.display = 'block';
+            juryTableBody.style.display = 'none';
+
+            try {
+                const response = await fetch('/admin/note', { method: 'GET' });
+
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la récupération des membres du jury');
+                }
+
+                const juryMembers = await response.json();
+                juryTableBody.innerHTML = '';
+
+                juryMembers.forEach(member => {
+                    const row = document.createElement('tr');
+                    row.className = 'hover:bg-gray-50';
+                    row.innerHTML = `
+                        <td class="px-6 py-4">${member.id}</td>
+                        <td class="px-6 py-4">${member.code_film}</td>
+                        <td class="px-6 py-4">${member.code}</td>
+                       
+                        <td class="px-6 py-4">${member.note}</td>
+                        <td class="px-6 py-4 space-x-2">
+                            <button class="edit-btn bg-blue-500 text-white px-3 py-1 rounded" data-id="${member.code}">Modifier</button>
+                            <button class="delete-btn bg-red-500 text-white px-3 py-1 rounded" data-id="${member.code}">Supprimer</button>
+                        </td>
+                    `;
+                    juryTableBody.appendChild(row);
+                });
+
+                // Ajouter les événements aux boutons
+                document.querySelectorAll('.edit-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const userId = e.target.dataset.id;
+                        // Logique de modification ici
+                        console.log('Modifier utilisateur:', userId);
+                    });
+                });
+
+                document.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', async (e) => {
+                        const userId = e.target.dataset.id;
+                        try {
+                            const response = await fetch('/admin/note/' + userId, {
+                                method: 'DELETE',
+                                credentials: 'same-origin'
+                            });
+
+                            if (response.ok) {
+                                alert('Membre du jury supprimé avec succès');
+                                fetchJury(); // Recharger la liste des membres du jury
+                            } else {
+                                alert('Erreur lors de la suppression du membre du jury');
+                            }
+                        } catch (error) {
+                            console.error('Erreur:', error);
+                            alert('Erreur lors de la suppression du membre du jury');
+                        }
+                    });
+                });
+
+            } catch (error) {
+                console.error('Erreur:', error);
+            } finally {
+                loadingElement.style.display = 'none';
+                juryTableBody.style.display = 'table-row-group';
+            }
+        }
+
+        fetchJury();
+    });
+</script>
+</body>
+</html>

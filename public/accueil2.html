@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="flex-direction">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil</title>
+</head>
+<body>
+    <style>
+      
+        
+        img{
+            width: 20px;
+            height: 15px;
+            display: block;
+            justify-content: flex-end;
+        }
+        .toggle_btn{
+            height:30px ;
+            width: 30px;
+            position: relative;
+            float: left;
+            margin-left: left 10px; 
+            margin-top: 5px;
+            cursor: pointer;
+        }
+        .toggle_btn span{
+            height: 3px;
+            background-color: black;
+            width: 100%;
+            position: absolute;
+            top: 20px;
+            left: 0;
+        }
+
+        .toggle_btn span::before{
+            content: '';
+            height: 3px;
+            background-color: black;
+            width: 100%;
+            position: absolute;
+            top: -10px;
+            left: 0;
+        }
+        .toggle_btn span::after{
+            content: '';
+            height: 3px;
+            background-color: black;
+            width: 100%;
+            position: absolute;
+            top: 10px;
+            left: 0;
+
+        }
+
+        .menubar{
+            height: 1000px;
+            background: color #d19da184;
+            width: 150px; 
+        }
+        .menubar a{
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            padding-top: 30px;
+            display: block;
+            text-decoration: none;
+        }
+         #toggle_btn2{
+            font-size: 24px;
+            font-weight: bold;
+         }
+    </style>
+    
+    <img src="Cinema Logo Design Шаблон _ Премиум векторы.jpeg" alt="Logo">
+
+
+     <img src="home-icon-logo-vector-design-illustration-simple-house-logo-icon-vector-in-flat-design-illustration-template-trendy-home-vector-icon-flat-design-for-2F22D6R-removebg-preview.png" alt=" oops">
+        <h1> Accueil</h1>
+        <div class="toggle_btn" id="toggle_btn1"><span></span></div>
+    
+    <div class="menu nav">
+        <div class="toggle_btn" id="toggle_btn2"><span></span></div>
+        
+        <a href="accueil.html">Accueil</a>
+        <a href="#">Planning</a>
+        <a href="#">JURYS</a>
+        <a href="#">FILM</a>
+    </div>
+
+</body>
+</html>

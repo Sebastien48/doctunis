@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planning de Films</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-image: url('imagefilm/Africa-Exclusive-afrique-industries-creatives-cinema.png');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <header class="flex items-center justify-between bg-gray-900 p-4">
+        <div class="flex items-center space-x-2">
+            <img src="Cinema Logo Design Шаблон _ Премиум векторы.jpeg" alt="Logo" class="h-12">
+        </div>
+        <div class="text-center">
+            <h1 class="text-3xl text-white font-bold">Planning des Films</h1>
+        </div>
+        <div>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Flag_of_Tunisia.svg" alt="Drapeau de la Tunisie" class="w-12 h-8">
+        </div>
+    </header>
+
+    <div class="container mx-auto p-6">
+        <div class="bg-gray shadow-md rounded-lg p-6">
+            <form id="film-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xl text-red-600 font-bold mb-2" for="film-code">Code du Film</label>
+                    <input type="text" id="film-code" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+            
+                <div>
+                    <label class="block text-xl text-red-600 font-bold mb-2" for="film-title">Titre du Film</label>
+                    <input type="text" id="film-title" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+            
+                <div>
+                    <label class="block text-xl text-red-600 font-bold mb-2" for="film-date">Date de Projection</label>
+                    <input type="date" id="film-date" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+            
+                <div>
+                    <label class="block text-xl text-red-600 font-bold mb-2" for="film-time">Heure de Projection</label>
+                    <input type="time" id="film-time" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+            
+                <div>
+                    <label class="block text-xl text-red-600 font-bold mb-2" for="film-salle">Salle</label>
+                    <select id="film-salle" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                        <option value="">Sélectionnez une salle</option>
+                        <option value="Pathé Tunis City">Pathé Tunis City</option>
+                        <option value="Cinéma Le Colisée">Cinéma Le Colisée</option>
+                        <option value="Cinéma Le Mondial">Cinéma Le Mondial</option>
+                        <option value="Cinéma L'Alhambra">Cinéma L'Alhambra</option>
+                    </select>
+                </div>
+            
+                <div>
+                    <label class="block text-xl text-red-600 font-bold mb-2" for="film-image">Image du Film</label>
+                    <input type="file" id="film-image" accept="image/*" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+            
+                <div>
+                    <label class="block text-xl text-red-600 font-bold mb-2" for="jury1">Code Jury 1</label>
+                    <input type="text" id="jury1" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+            
+                <div>
+                    <label class="block text-xl text-red-600 font-bold mb-2" for="jury2">Code Jury 2</label>
+                    <input type="text" id="jury2" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+            
+                <div>
+                    <label class="block text-xl text-red-600 font-bold mb-2" for="jury3">Code Jury 3</label>
+                    <input type="text" id="jury3" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+            
+                <div class="col-span-1 md:col-span-2 text-center">
+                    <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition duration-300">
+                        Ajouter au Planning
+                    </button>
+                </div>
+            </form>
+        </div>
+    
+        <div id="planning-container" class="mt-8">
+            <h2 class="text-2xl text-center underline font-bold mb-4 text-red-500">Planning Actuel</h2>
+            <div id="planning-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Les projections seront ajoutées ici dynamiquement -->
+            </div>
+        </div>
+    </div>
+ 
+
+    <script>
+      // Event listener for form submission
+document.getElementById('film-form').addEventListener('submit', handleSubmit);
+
+function getFormDataWithoutImage() {
+    return {
+        filmcode: document.getElementById('film-code').value.trim(),       
+        titre_film: document.getElementById('film-title').value.trim(),    
+        filmDate: document.getElementById('film-date').value,              
+        filmTime: document.getElementById('film-time').value,              
+        filmSalle: document.getElementById('film-salle').value,            
+        jury1: document.getElementById('jury1').value.trim(),
+        jury2: document.getElementById('jury2').value.trim(),
+        jury3: document.getElementById('jury3').value.trim(),
+    };
+}
+
+// Async function to handle form submission
+async function handleSubmit(event) {
+    event.preventDefault();
+    if (!validateForm()) return;
+
+    const formData = getFormDataWithoutImage();
+    const file = document.getElementById('film-image').files[0];
+    
+    try {
+        if (file) {
+            formData.image = await getImageDataURL(file);
+        }
+
+        console.log('Données envoyées:', formData); // Pour le débogage
+
+        const response = await fetch('/production', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Erreur serveur');
+        }
+
+        const data = await response.json();
+        
+        // Mise à jour du stockage local avec les données correctes
+        const newProjection = {
+            id: data.id || Date.now(),
+            code: formData.filmcode,
+            titre: formData.titre_film,
+            date: formData.filmDate,
+            heure: formData.filmTime,
+            salle: formData.filmSalle,
+            jurys: [formData.jury1, formData.jury2, formData.jury3].filter(Boolean),
+            image: formData.image
+        };
+
+        projections.push(newProjection);
+        sauvegarderProjections();
+        afficherProjections();
+        
+        document.getElementById('film-form').reset();
+        alert('Projection ajoutée avec succès!');
+        
+    } catch (error) {
+        console.error('Erreur détaillée:', error);
+        alert(`Erreur: ${error.message}`);
+    }
+}
+
+// Function to read image file and convert to Data URL
+function getImageDataURL(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(reader.error);
+        reader.readAsDataURL(file);
+    });
+}
+
+// Validation du formulaire
+function validateForm() {
+    const filmCode = document.getElementById('film-code').value.trim();
+    const filmTitle = document.getElementById('film-title').value.trim();
+    const filmDate = document.getElementById('film-date').value;
+    const filmTime = document.getElementById('film-time').value;
+    const filmSalle = document.getElementById('film-salle').value;
+    const jury1 = document.getElementById('jury1').value.trim();
+    const jury2 = document.getElementById('jury2').value.trim();
+    const jury3 = document.getElementById('jury3').value.trim();
+
+    let errors = [];
+
+    // Validation du code film
+    if (!filmCode || filmCode.length < 3) {
+        errors.push("Le code du film doit contenir au moins 3 caractères");
+    }
+
+    // Validation du titre
+    if (!filmTitle) {
+        errors.push("Le titre du film est requis");
+    }
+
+    // Validation de la date
+    const selectedDate = new Date(filmDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (!filmDate || selectedDate < today) {
+        errors.push("La date doit être égale ou postérieure à aujourd'hui");
+    }
+
+    // Validation de l'heure
+    if (!filmTime) {
+        errors.push("L'heure de projection est requise");
+    }
+
+    // Validation de la salle
+    if (!filmSalle) {
+        errors.push("Veuillez sélectionner une salle");
+    }
+
+    // Validation des jurys
+    if (!jury1) {
+        errors.push("Le jury 1 est requis");
+    }
+
+    // Vérification du format des codes jury (si fournis)
+    const juryRegex = /^[A-Za-z0-9-]+$/;
+    [jury1, jury2, jury3].forEach((jury, index) => {
+        if (jury && !juryRegex.test(jury)) {
+            errors.push(`Le code du jury ${index + 1} contient des caractères non valides`);
+        }
+    });
+
+    if (errors.length > 0) {
+        alert(errors.join('\n'));
+        return false;
+    }
+
+    return true;
+}
+
+// Charger les projections depuis localStorage
+function chargerProjections() {
+    projections = JSON.parse(localStorage.getItem('projections')) || [];
+}
+
+// Sauvegarder les projections dans localStorage
+function sauvegarderProjections() {
+    localStorage.setItem('projections', JSON.stringify(projections));
+}
+
+// Afficher les projections
+function afficherProjections() {
+    const planningList = document.getElementById('planning-list');
+    planningList.innerHTML = '';
+
+    if (projections.length === 0) {
+        planningList.innerHTML = '<div class="col-span-full text-center text-gray-500">Aucune projection planifiée</div>';
+        return;
+    }
+
+    projections.forEach(projection => {
+        const projectionCard = document.createElement('div');
+        projectionCard.classList.add('bg-white', 'p-4', 'rounded-lg', 'shadow-md');
+
+        const dateFormattee = new Date(projection.date).toLocaleDateString('fr-FR', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        projectionCard.innerHTML = `
+            <p><strong>Code du Film :</strong> ${projection.code}</p>
+            <p><strong>Titre :</strong> ${projection.titre}</p>
+            <p><strong>Date :</strong> ${dateFormattee}</p>
+            <p><strong>Heure :</strong> ${projection.heure}</p>
+            <p><strong>Salle :</strong> ${projection.salle}</p>
+            <p><strong>Jurys :</strong> ${projection.jurys.join(', ')}</p>
+            ${projection.image ? `<img src="${projection.image}" alt="Image du Film" class="w-full h-32 object-cover rounded-lg mt-2">` : ''}
+            <div class="flex space-x-48 mt-4">
+                <button onclick="supprimerProjection(${projection.id})" class="bg-slate-500 text-white px-3 py-1 rounded hover:bg-red-600">Supprimer</button>
+                <button onclick="publierProjection(${projection.id})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-red-600 onclick">Publier</button>
+            </div>
+        `;
+
+        planningList.appendChild(projectionCard);
+    });
+}
+
+// Supprimer une projection
+function supprimerProjection(id) {
+    projections = projections.filter(projection => projection.id !== id);
+    sauvegarderProjections();
+    afficherProjections();
+    if (window.location.pathname.includes('schedule.html')) {
+        alert('Projection supprimée avec succès');
+    }
+}
+
+// Publier une projection 
+
+function publierProjection(id) {
+    console.log("Publication de la projection avec l'ID :", id);
+    const projection = projections.find(p => p.id === id);
+    if (!projection) {
+        alert('Projection introuvable');
+        return;
+    }
+
+    // Sauvegarde de la projection publiée dans localStorage
+    localStorage.setItem('publishedProjection', JSON.stringify(projection));
+
+    // Redirection vers la page "schedule.html"
+    //window.location.href = 'schedule.html';
+    alert("Projection publiée avec succès !");
+    
+}
+
+// Initialisations
+document.addEventListener('DOMContentLoaded', function() {
+    chargerProjections();
+    afficherProjections();
+});
+    </script>
+</body>
+</html>

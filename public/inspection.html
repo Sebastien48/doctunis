@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsable d'inspection</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style> body {
+    background-image: url(imagefilm/IN\ Tendance\ 170921.png);
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.transparent-form {
+    background-color: rgba(255, 255, 255, 0.1); /* Fond blanc à 10% de transparence */
+    backdrop-filter: blur(1px); /* Effet de flou pour améliorer la lisibilité */
+    padding: 20px; /* Espacement intérieur */
+    border-radius: 10px; /* Coins arrondis */
+}
+</style>
+</head>
+<body class="bg-gray-100 font-sans">
+  <header class="flex items-center justify-between bg-gray-900 p-4">
+    <div class="flex items-center space-x-2">
+      <img src="Cinema Logo Design Шаблон _ Премиум векторы.jpeg" alt="Logo" class="h-12">
+    </div>
+    <div class="text-center">
+      <h1 class="text-4xl text-red-600 font-bold">Gestion de films (documentaire)</h1>
+    </div>
+    <div>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Flag_of_Tunisia.svg" alt="Drapeau de la Tunisie" class="w-12 h-8">
+    </div>
+  </header>
+  <h1 class="text-3xl font-bold text-center text-white mb-6">Enregistrement de films (documentaire)</h1>
+  
+  <!-- Formulaire d'ajout de documentaire -->
+  <form id="document-form" method="post" class="transparent-form max-w-4xl mx-auto p-6">
+    <h3 class="text-3xl text-white mt-4">Entrez les coordonnées du film</h3>
+
+    <div>
+      <label for="codeDoc" class="block text-2xl text-white font-bold">Code-film</label>
+      <input type="text" id="code_film" name="codeDoc" class="mt-2 w-full p-3 rounded-md border border-gray-300" required>
+      <div id="error-code_film" class="text-red-500 text-sm mt-1"></div>
+    </div>
+
+    <div>
+      <label for="titreDoc" class="block text-2xl text-white font-bold">Titre</label>
+      <input type="text" id="titre_film" name="titreDoc" class="mt-2 w-full p-3 rounded-md border border-gray-300" required>
+    </div>
+
+    <div>
+      <label for="dateDoc" class="block text-2xl text-white font-bold">Date de Production</label>
+      <input type="date" id="date_production_film" name="dateDoc" class="mt-2 w-full p-3 rounded-md border border-gray-300" required>
+    </div>
+
+    <div>
+      <label for="sujetDoc" class="block text-2xl text-white font-bold">Sujet</label>
+      <textarea id="sujet_film" name="sujetDoc" rows="4" class="mt-2 w-full p-3 rounded-md border border-gray-300" required></textarea>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+      <!-- Formulaire Réalisateur -->
+      <div>
+        <h3 class="text-3xl text-white mt-4">Entrez les coordonnées du Réalisateur</h3>
+        <div>
+          <label for="codeRealisateur" class="block text-2xl text-white font-bold">Code Réalisateur</label>
+          <input type="text" id="code_realisateur" name="codeRealisateur" class="mt-2 w-full p-3 rounded-md border border-gray-300" required>
+          <div id="error-code_realisateur" class="text-red-500 text-sm mt-1"></div>
+        </div>
+
+        <div>
+          <label for="nomRealisateur" class="block text-2xl text-white font-bold">Nom</label>
+          <input type="text" id="nom_realisateur" name="nomRealisateur" class="mt-2 w-full p-3 rounded-md border border-gray-300" required>
+        </div>
+
+        <div>
+          <label for="prenomRealisateur" class="block text-2xl text-white font-bold">Prénom</label>
+          <input type="text" id="prenom_realisateur" name="prenomRealisateur" class="mt-2 w-full p-3 rounded-md border border-gray-300" required>
+        </div>
+
+        <div>
+          <label for="naissanceRealisateur" class="block text-2xl text-white font-bold">Date de Naissance</label>
+          <input type="date" id="date_naissance_realisateur" name="naissanceRealisateur" class="mt-2 w-full p-3 rounded-md border border-gray-300" required>
+        </div>
+      </div>
+
+      <!-- Formulaire Producteur -->
+      <div>
+        <h3 class="text-3xl text-white mt-4">Entrez les coordonnées du Producteur</h3>
+        <div>
+          <label for="codeProducteur" class="block text-2xl text-white font-bold">Code Producteur</label>
+          <input type="text" id="code_producteur" name="codeProducteur" class="mt-2 w-full p-3 rounded-md border border-gray-300" required>
+          <div id="error-code_producteur" class="text-red-500 text-sm mt-1"></div>
+        </div>
+
+        <div>
+          <label for="nomProducteur" class="block text-2xl text-white font-bold">Nom</label>
+          <input type="text" id="nom_producteur" name="nomProducteur" class="mt-2 w-full p-3 rounded-md border border-gray-300" required>
+        </div>
+
+        <div>
+          <label for="prenomProducteur" class="block text-2xl text-white font-bold">Prénom</label>
+          <input type="text" id="prenom_producteur" name="prenomProducteur" class="mt-2 w-full p-3 rounded-md border border-gray-300" required>
+        </div>
+
+        <div>
+          <label for="naissanceProducteur" class="block text-2xl text-white font-bold">Date de Naissance</label>
+          <input type="date" id="date_naissance_producteur" name="naissanceProducteur" class="mt-2 w-full p-3 rounded-md border border-gray-300" required>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-700 mt-6">Enregistrer</button>
+  </form>
+
+  <!-- Section d'affichage des résultats -->
+  <div id="result-section" class="mt-8">
+    <h2 class="text-2xl font-semibold  text-center underline text-red-800 mb-4">Films enregistrés</h2>
+    <div id="result-content" class="space-y-4">
+      <!-- Les résultats seront affichés ici -->
+    </div>
+  </div>
+  
+  <footer class="bg-gray-800 text-white py-4 mt-12">
+    <div class="container mx-auto text-center">
+      <p class="text-sm">&copy; 2024 DOC A TUNIS (Festival de Films Documentaires)</p>
+    </div>
+  </footer>
+  
+  <script>
+    let documents = []; // Tableau pour stocker les films
+
+    // Charger les films depuis le localStorage au démarrage
+    document.addEventListener('DOMContentLoaded', () => {
+      loadDocuments();
+    });
+
+    // Validation des données avant l'ajout
+    function validateFilmData(data) {
+      if (!data.code_film || !data.titre_film || !data.date_production_film) {
+        alert('Veuillez remplir tous les champs obligatoires.');
+        return false;
+      }
+      return true;
+    }
+
+    // Réinitialiser le formulaire
+    function resetForm() {
+      document.getElementById('document-form').reset();
+    }
+
+    document.getElementById('document-form').addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      const data = {
+        code_film: document.getElementById('code_film').value,
+        titre_film: document.getElementById('titre_film').value,
+        date_production_film: document.getElementById('date_production_film').value,
+        sujet_film: document.getElementById('sujet_film').value,
+        code_realisateur: document.getElementById('code_realisateur').value,
+        nom_realisateur: document.getElementById('nom_realisateur').value,
+        prenom_realisateur: document.getElementById('prenom_realisateur').value,
+        date_naissance_realisateur: document.getElementById('date_naissance_realisateur').value,
+        code_producteur: document.getElementById('code_producteur').value,
+        nom_producteur: document.getElementById('nom_producteur').value,
+        prenom_producteur: document.getElementById('prenom_producteur').value,
+        date_naissance_producteur: document.getElementById('date_naissance_producteur').value,
+      };
+
+      if (!validateFilmData(data)) {
+        return;
+      }
+
+      try {
+        // Envoyer les données au backend
+        const response = await fetch('/inspection', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+          throw new Error('Erreur lors de l\'enregistrement du film');
+        }
+
+        const result = await response.json();
+        console.log('Film enregistré avec succès:', result);
+
+        // Ajouter le film à la liste côté frontend
+        documents.push(result);
+        localStorage.setItem('films', JSON.stringify(documents)); // Sauvegarder dans le localStorage
+        displayDocuments(); // Afficher les films mis à jour
+        resetForm(); // Réinitialiser le formulaire
+
+        alert('Film enregistré avec succès !');
+      } catch (error) {
+        console.error('Erreur:', error);
+        alert('Erreur lors de l\'enregistrement du film');
+      }
+    });
+
+    // Charger les films depuis le localStorage
+    function loadDocuments() {
+      const storedFilms = localStorage.getItem('films');
+      if (storedFilms) {
+        documents = JSON.parse(storedFilms);
+        displayDocuments();
+      }
+    }
+
+    // Afficher les films
+    function displayDocuments() {
+      const resultContent = document.getElementById('result-content');
+      resultContent.innerHTML = ''; 
+
+      documents.forEach((doc, index) => {
+        const documentItem = document.createElement('div');
+        documentItem.classList.add('bg-gray-100', 'p-4', 'rounded-lg', 'shadow-md', 'mb-4');
+
+        const formattedDateProduction = new Date(doc.date_production_film).toLocaleDateString('fr-FR');
+        const formattedDateNaissanceRealisateur = new Date(doc.date_naissance_realisateur).toLocaleDateString('fr-FR');
+        const formattedDateNaissanceProducteur = new Date(doc.date_naissance_producteur).toLocaleDateString('fr-FR');
+
+        documentItem.innerHTML = `
+          <div class="space-y-2">
+            <h4 class="font-semibold text-red-800  underline text-lg">Film ${index + 1}</h4>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <h5 class="font-semibold text-gray-700 underline">Informations du film</h5>
+                <p><strong>Code :</strong> ${doc.code_film}</p>
+                <p><strong>Titre :</strong> ${doc.titre_film}</p>
+                <p><strong>Date de Production :</strong> ${formattedDateProduction}</p>
+                <p><strong>Sujet :</strong> ${doc.sujet_film}</p>
+              </div>
+
+              <div>
+                <h5 class="font-semibold text-gray-700 underline">Réalisateur</h5>
+                <p><strong>Code :</strong> ${doc.code_realisateur}</p>
+                <p><strong>Nom :</strong> ${doc.nom_realisateur}</p>
+                <p><strong>Prénom :</strong> ${doc.prenom_realisateur}</p>
+                <p><strong>Date de Naissance :</strong> ${formattedDateNaissanceRealisateur}</p>
+              </div>
+
+              <div>
+                <h5 class="font-semibold text-gray-700 underline">Producteur</h5>
+                <p><strong>Code :</strong> ${doc.code_producteur}</p>
+                <p><strong>Nom :</strong> ${doc.nom_producteur}</p>
+                <p><strong>Prénom :</strong> ${doc.prenom_producteur}</p>
+                <p><strong>Date de Naissance :</strong> ${formattedDateNaissanceProducteur}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 flex space-x-2">
+            <button onclick="updateFilm('${doc.code_film}')" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+              Modifier
+            </button>
+            <button onclick="deleteDocument('${doc.code_film}')" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+              Supprimer
+            </button>
+          </div>
+        `;
+
+        resultContent.appendChild(documentItem);
+      });
+    }
+    
+   
+
+       // Supprimer un film
+       async function deleteDocument(code_film) {
+  if (!code_film) {
+    alert('Code film invalide');
+    return;
+  }
+
+  if (confirm('Êtes-vous sûr de vouloir supprimer ce film ?')) {
+    try {
+      const response = await fetch(`/inspection/${code_film}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json(); // Lire le message d'erreur du backend
+        throw new Error(errorData.message || 'Erreur lors de la suppression');
+      }
+
+      // Filtrer le tableau pour supprimer le film
+      documents = documents.filter(doc => doc.code_film !== code_film);
+
+      // Sauvegarder dans le localStorage
+      localStorage.setItem('films', JSON.stringify(documents));
+
+      // Afficher les films mis à jour
+      displayDocuments();
+
+      alert('Film supprimé avec succès');
+    } catch (error) {
+      console.error('Erreur:', error);
+      alert('Erreur lors de la suppression: ' + error.message);
+    }
+  }
+}
+        // Modifier un film
+        async function updateFilm(code_film) {
+            // Trouver le film à modifier
+            const filmToUpdate = documents.find(doc => doc.code_film === code_film);
+            if (!filmToUpdate) {
+                alert('Film non trouvé');
+                return;
+            }
+
+            // Pré-remplir le formulaire avec les données du film
+            document.getElementById('code_film').value = filmToUpdate.code_film;
+            document.getElementById('titre_film').value = filmToUpdate.titre_film;
+            document.getElementById('date_production_film').value = filmToUpdate.date_production_film;
+            document.getElementById('sujet_film').value = filmToUpdate.sujet_film;
+            document.getElementById('code_realisateur').value = filmToUpdate.code_realisateur;
+            document.getElementById('nom_realisateur').value = filmToUpdate.nom_realisateur;
+            document.getElementById('prenom_realisateur').value = filmToUpdate.prenom_realisateur;
+            document.getElementById('date_naissance_realisateur').value = filmToUpdate.date_naissance_realisateur;
+            document.getElementById('code_producteur').value = filmToUpdate.code_producteur;
+            document.getElementById('nom_producteur').value = filmToUpdate.nom_producteur;
+            document.getElementById('prenom_producteur').value = filmToUpdate.prenom_producteur;
+            document.getElementById('date_naissance_producteur').value = filmToUpdate.date_naissance_producteur;
+
+            // Supprimer le film du tableau
+            documents = documents.filter(doc => doc.code_film !== code_film);
+
+            // Sauvegarder dans le localStorage
+            localStorage.setItem('films', JSON.stringify(documents));
+
+            // Afficher les films mis à jour
+            displayDocuments();
+        }
+
+        // Fonction pour mettre à jour un film
+        async function saveUpdatedFilm() {
+            const filmData = {
+                code_film: document.getElementById('code_film').value,
+                titre_film: document.getElementById('titre_film').value,
+                date_production_film: document.getElementById('date_production_film').value,
+                sujet_film: document.getElementById('sujet_film').value,
+                code_realisateur: document.getElementById('code_realisateur').value,
+                nom_realisateur: document.getElementById('nom_realisateur').value,
+                prenom_realisateur: document.getElementById('prenom_realisateur').value,
+                date_naissance_realisateur: document.getElementById('date_naissance_realisateur').value,
+                code_producteur: document.getElementById('code_producteur').value,
+                nom_producteur: document.getElementById('nom_producteur').value,
+                prenom_producteur: document.getElementById('prenom_producteur').value,
+                date_naissance_producteur: document.getElementById('date_naissance_producteur').value
+            };
+
+            try {
+                const response = await fetch(`/inspection/${filmData.code_film}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(filmData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la mise à jour');
+                }
+
+                // Ajouter le film mis à jour au tableau local
+                documents.push(filmData);
+                localStorage.setItem('films', JSON.stringify(documents)); // Sauvegarder dans le localStorage
+                
+                // Actualiser l'affichage
+                displayDocuments();
+                
+                // Réinitialiser le formulaire
+                document.getElementById('film-form').reset();
+                
+                alert('Film mis à jour avec succès !');
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('Erreur lors de la mise à jour: ' + error.message);
+            }
+        }
+  </script>
+</body>
+</html>

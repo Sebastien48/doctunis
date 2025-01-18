@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doc à Tunis - Planning</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body{
+    background-image: url(les-films-incontournables-du-cinema-w_2524x884.jpg);
+    background-size: cover;
+    background-position :center;
+  }
+  </style>
+</head>
+<body class="bg-gray-900 text-zinc-50 font-sans">
+
+  
+  <!-- Barre de menu -->
+  <nav class="bg-gray-800 text-white p-4">
+    <div class="container mx-auto flex items-center">
+      <!-- Logo et Titre avec Navigation -->
+      <div class="flex items-center space-x-6">
+        <!-- Logo -->
+        <img src="Cinema Logo Design Шаблон _ Премиум векторы.jpeg" alt="Logo du festival" class="h-10 w-auto">
+        <!-- Titre et Navigation -->
+        <div class="flex items-center space-x-20">
+          <!-- Titre -->
+          <h1 class="text-3xl font-bold max-w-fit">Doc à Tunis</h1>    
+          <!-- Navigation -->
+          <ul class="flex space-x-6">
+            <li>
+              <a href="accueil.html" class="hover:underline  text-2xl text-zinc-50 hover:text-cyan-600 active:text-gray-500">
+                Accueil
+              </a>
+            </li>
+            <li>
+              <a href="films.html" class="hover:underline text-2xl text-zinc-50 hover:text-cyan-500 active:text-gray-800">
+                Films
+              </a>
+            </li>
+            <li>
+              <a href="schedule.html" class="hover:underline text-2xl text-red-500 hover:text-cyan-500 active:text-gray-800">
+                Planning
+              </a>
+            </li>
+            <li>
+              <a href="jurys.html" class="hover:underline text-2xl text-zinc-50 hover:text-cyan-500 active:text-gray-800">
+                Jurys
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="ml-auto relative">
+        <div id="username-box" class="cursor-pointer px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600">Nom d'utilisateur</div>
+        <button id="logout-btn" class=" cursor-pointer px-4 py-1 bg-gray-600 text-white rounded-md hover:bg-red-700 hidden">Déconnexion</button>
+    </div>
+    </div>
+
+  </nav>
+
+  <!-- Contenu de la page -->
+  <div class="container mx-auto p-6">
+    <div id="projections-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Les détails des projections seront affichés ici -->
+    </div>
+</div>
+
+
+  <!-- Footer -->
+
+  <footer class="bg-gray-800 text-white py-4 mt-12">
+    <div class="container mx-auto text-center">
+        <p class="text-sm">&copy; 2024 DOC A TUNIS (Festival de Films Documentaires)</p>
+    </div>
+</footer>
+  
+
+</body>
+<script>
+  // Récupérer les projections depuis localStorage
+  const projections = JSON.parse(localStorage.getItem('projections'));
+
+  if (projections && projections.length > 0) {
+      const projectionsList = document.getElementById('projections-list');
+
+      projections.forEach(projection => {
+          const dateFormattee = new Date(projection.date).toLocaleDateString('fr-FR', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+          });
+
+          const projectionDetails = document.createElement('div');
+          projectionDetails.className = 'bg-white shadow-md rounded-lg p-6 flex flex-col';
+          projectionDetails.innerHTML = `
+
+          ${projection.image ? `
+                  <div class="mt-4">
+                      <img src="${projection.image}" alt="Image du Film" class="w-full h-60 object-cover rounded-lg">
+                  </div>
+              ` : ''}
+              <h2 class="text-2xl text-center underline font-bold mb-4 text-red-500">${projection.titre}</h2>
+
+             <div class="flex-1 bg-blue-100 text-blue-900 p-4 rounded-lg">
+                <p><strong>Date :</strong> ${dateFormattee}</p>
+                <p><strong>Heure :</strong> ${projection.heure}</p>
+                <p><strong>Salle :</strong> ${projection.salle}</p>
+              </div>
+              
+          `;
+
+          projectionsList.appendChild(projectionDetails);
+      });
+  } else {
+      alert('Aucune projection publiée');
+  }
+  
+document.addEventListener('DOMContentLoaded', async () => {
+    const usernameBox = document.getElementById('username-box');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    // Fonction pour vérifier la session
+    async function checkSession() {
+        try {
+            const response = await fetch('/check-session');
+            const data = await response.json();
+            
+            if (data.loggedIn) {
+                usernameBox.textContent = data.username;
+                return true;
+            } else {
+                window.location.href = 'first.html'; // Redirection si non connecté
+                return false;
+            }
+        } catch (error) {
+            console.error('Erreur lors de la vérification de la session:', error);
+            return false;
+        }
+    }
+
+    // Vérifier la session au chargement
+    await checkSession();
+
+    // Gestionnaire pour le bouton de déconnexion
+    logoutBtn.addEventListener('click', async () => {
+        try {
+            const response = await fetch('/logout', {
+                method: 'POST'
+            });
+            
+            if (response.ok) {
+                localStorage.removeItem('username');
+                window.location.href = 'first.html';
+            }
+        } catch (error) {
+            console.error('Erreur lors de la déconnexion:', error);
+        }
+    });
+
+    // Afficher/cacher le bouton de déconnexion
+    usernameBox.addEventListener('click', () => {
+        usernameBox.classList.add('hidden');
+        logoutBtn.classList.remove('hidden');
+    });
+});
+
+
+</script>
+</html>

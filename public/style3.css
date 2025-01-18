@@ -1,0 +1,113 @@
+/* Styles généraux */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #af303b, #c51e3c); /* Dégradé bleu-vert */
+    color: white;
+}
+
+/* Conteneur du formulaire */
+.container {
+    background: rgba(182, 31, 31, 0.1); /* Couleur semi-transparente bleu cyan */
+    backdrop-filter: blur(15px); /* Effet verre flou */
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); /* Ombre douce */
+    padding: 30px;
+    width: 350px;
+    text-align: center;
+}
+
+/* Titre */
+.loging-title {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: white;
+}
+
+/* Boîtes de saisie */
+.input-box {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.input-box input {
+    width: 90%;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.2); /* Couleur semi-transparente */
+    color: white;
+    font-size: 16px;
+    outline: none;
+    caret-color: rgb(13, 127, 168); /* Couleur du curseur */
+}
+
+.input-box input::placeholder {
+    color: rgba(255, 255, 255, 0.7); /* Placeholder stylé */
+}
+
+.input-box i {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.7); /* Icône stylée */
+    font-size: 18px;
+}
+
+/* Section remember-me et forgot-password */
+.remember-forgot-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.remember-me h5,
+.forgot-password h5 {
+    margin: 0;
+    color: white;
+}
+
+.forgot-password h5:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Bouton de connexion */
+.login-button {
+    width: 75%;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #00bcd4, #0097a7); /* Dégradé bleu-vert */
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.login-button:hover {
+    background: linear-gradient(135deg, #0097a7, #00bcd4); /* Inversion du dégradé */
+}
+
+/* Texte d'inscription */
+.dont-have-an-account {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.dont-have-an-account a {
+    color: #00bcd4; /* Bleu clair */
+    text-decoration: none;
+}
+
+.dont-have-an-account a:hover {
+    text-decoration: underline;
+}

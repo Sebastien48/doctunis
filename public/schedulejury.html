@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Jury</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-image: url('imagefilm/Africa-Exclusive-afrique-industries-creatives-cinema.png');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <header class="flex items-center justify-between bg-gray-900 p-4">
+        <div class="flex items-center space-x-2">
+            <img src="Cinema Logo Design Шаблон _ Премиум векторы.jpeg" alt="Logo" class="h-12">
+        </div>
+        <div class="text-center">
+            <h1 class="text-3xl text-white font-bold">Espace Jury</h1>
+        </div>
+        <div>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Flag_of_Tunisia.svg" alt="Drapeau de la Tunisie" class="w-12 h-8">
+        </div>
+    </header>
+
+    <div class="container mx-auto p-6">
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h2 class="text-2xl text-center underline font-bold mb-4 text-red-500">Films à Projeter</h2>
+            <div id="jury-films-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Les films seront affichés ici dynamiquement -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Données des jurys (simulées)
+        const jurys = [
+            { code: 'JURY1', nom: 'Dupont', prenom: 'Jean' },
+            { code: 'JURY2', nom: 'Martin', prenom: 'Sophie' },
+            { code: 'JURY3', nom: 'Leroy', prenom: 'Pierre' },
+        ];
+
+        // Charger les projections depuis localStorage
+        function chargerProjections() {
+            return JSON.parse(localStorage.getItem('projections')) || [];
+        }
+
+        // Afficher les films pour le jury connecté
+        function afficherFilmsPourJury(codeJury) {
+            const juryFilmsList = document.getElementById('jury-films-list');
+            juryFilmsList.innerHTML = '';
+
+            const projections = chargerProjections();
+            const filmsPourJury = projections.filter(projection => 
+                projection.jurys.includes(codeJury)
+            );
+
+            if (filmsPourJury.length === 0) {
+                juryFilmsList.innerHTML = '<div class="col-span-full text-center text-gray-500">Aucun film à projeter pour ce jury</div>';
+                return;
+            }
+
+            filmsPourJury.forEach(projection => {
+                const filmCard = document.createElement('div');
+                filmCard.classList.add('bg-white', 'p-4', 'rounded-lg', 'shadow-md');
+
+                const dateFormattee = new Date(projection.date).toLocaleDateString('fr-FR', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+
+                const jurysDetails = projection.jurys.map(code => {
+                    const jury = jurys.find(j => j.code === code);
+                    return jury ? `${jury.nom} ${jury.prenom}` : 'Inconnu';
+                }).join(', ');
+
+                filmCard.innerHTML = `
+                    <p><strong>Code du Film :</strong> ${projection.code}</p>
+                    <p><strong>Titre :</strong> ${projection.titre}</p>
+                    <p><strong>Date :</strong> ${dateFormattee}</p>
+                    <p><strong>Heure :</strong> ${projection.heure}</p>
+                    <p><strong>Salle :</strong> ${projection.salle}</p>
+                    <p><strong>Jurys :</strong> ${jurysDetails}</p>
+                    ${projection.image ? `<img src="${projection.image}" alt="Image du Film" class="w-full h-32 object-cover rounded-lg mt-2">` : ''}
+                `;
+
+                juryFilmsList.appendChild(filmCard);
+            });
+        }
+
+        // Simuler la connexion d'un jury (par exemple, via un formulaire de connexion)
+        function connecterJury(codeJury) {
+            const jury = jurys.find(j => j.code === codeJury);
+            if (!jury) {
+                alert('Code jury invalide');
+                return;
+            }
+
+            // Afficher les films pour ce jury
+            afficherFilmsPourJury(codeJury);
+        }
+
+        // Exemple de connexion (à remplacer par un formulaire de connexion)
+        document.addEventListener('DOMContentLoaded', function() {
+            const codeJury = prompt('Entrez votre code jury :');
+            connecterJury(codeJury);
+        });
+    </script>
+</body>
+</html>

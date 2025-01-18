@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note du président du jury</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-image: url('https://img.freepik.com/free-photo/empty-cinema-auditorium-with-red-seats_1217-3584.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 bg-opacity-75">
+
+    <!-- Header -->
+    <header class="bg-gray-900 text-white py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <img src="Cinema Logo Design Шаблон _ Премиум векторы.jpeg" alt="Logo" class="h-12">
+            </div>
+            <h1 class="text-2xl font-bold">Gestion des notes (Président du jury)</h1>
+            <div>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Flag_of_Tunisia.svg" alt="Drapeau de la Tunisie" class="w-12 h-8">
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="flex-grow flex items-center justify-center">
+        <div class="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg w-full max-w-md">
+            <h1 class="text-2xl font-bold mb-6 text-center">Note du Président du Jury</h1>
+            <form id="note-form">
+                <div class="mb-4">
+                    <label for="filmCode" class="block text-xl text-gray-700 font-bold mb-2">Code du film</label>
+                    <input type="text" id="filmCode" name="filmCode" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="filmTitle" class="block text-xl text-gray-700 font-bold mb-2">Titre du film</label>
+                    <input type="text" id="filmTitle" name="filmTitle" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+                </div>
+
+                <div class="mb-4">
+                    <label for="juryCode" class="block text-xl text-gray-700 font-bold mb-2">Code du jury</label>
+                    <input type="text" id="juryCode" name="juryCode" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-xl text-gray-700 font-bold mb-2" for="film-jury">Nom & Prénom du Jury</label>
+                    <select id="film-jury" name="juryName" required class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="">Sélectionnez un jury</option>
+                        <option value="Maria Ahmed Ben Ali">Maria Ahmed Ben Ali</option>
+                        <option value="Leila Khaled">Leila Khaled</option>
+                        <option value="Omar Said">Omar Said</option>
+                        <option value="Aïcha Koulibaly">Aïcha Koulibaly</option>
+                        <option value="Fadhel Mbarek">Fadhel Mbarek</option>
+                    </select>
+                </div>
+
+                <div class="mb-6">
+                    <label for="note" class="block text-xl text-gray-700 font-bold mb-2">Note</label>
+                    <input type="number" id="note" name="note" min="1" max="10" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" required>
+                </div>
+
+                <div class="flex justify-center">
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        Soumettre
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="container mx-auto text-center">
+            <p class="text-sm">&copy; 2024 DOC A TUNIS (Festival de Films Documentaires)</p>
+        </div>
+    </footer>
+
+    <script>
+        let notes = JSON.parse(localStorage.getItem('notes')) || [];
+
+        // Fonction pour afficher les notes
+        function displayNotes() {
+            const notesContainer = document.createElement('div');
+            notesContainer.className = 'mt-8';
+            notes.forEach(note => {
+                const noteCard = document.createElement('div');
+                noteCard.className = 'bg-white p-4 rounded-lg shadow-md mb-4';
+                noteCard.innerHTML = `
+                    <p><strong>Code du film:</strong> ${note.film_code}</p>
+                    <p><strong>Titre du film:</strong> ${note.film_title}</p>
+                    <p><strong>Code du jury:</strong> ${note.jury_code}</p>
+                    <p><strong>Nom & Prénom du Jury:</strong> ${note.jury_name}</p>
+                    <p><strong>Note:</strong> ${note.note}</p>
+                    <button onclick="updateFilm('${note.film_code}')" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+              Modifier
+            </button>
+                `;
+                notesContainer.appendChild(noteCard);
+            });
+            document.body.appendChild(notesContainer);
+        }
+
+        // Charger les notes au chargement de la page
+        document.addEventListener('DOMContentLoaded', displayNotes);
+
+        //Gestionnaire de soumission du formulaire
+        document.getElementById('note-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const noteData = {
+                film_code: document.getElementById('filmCode').value,
+                film_title: document.getElementById('filmTitle').value,
+                jury_code: document.getElementById('juryCode').value,
+                jury_name: document.getElementById('film-jury').value,
+                note: document.getElementById('note').value
+            };
+
+            try {
+                const response = await fetch('/notes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(noteData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erreur lors de l\'enregistrement');
+                }
+
+                const savedNote = await response.json();
+
+                // Ajouter la nouvelle note au tableau local
+                notes.push(savedNote);
+                localStorage.setItem('notes', JSON.stringify(notes)); // Sauvegarder dans le localStorage
+                
+                // Actualiser l'affichage
+                displayNotes();
+                
+                // Réinitialiser le formulaire
+                this.reset();
+                
+                alert('Note enregistrée avec succès !');
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('Erreur lors de l\'enregistrement: ' + error.message);
+            }
+        });
+
+        edit
+    </script>
+</body>
+</html>

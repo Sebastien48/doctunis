@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jury - Doc à Tunis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+<!-- Barre de menu -->
+<nav class="bg-gray-800 text-white p-4">
+  <div class="container mx-auto flex items-center">
+    <!-- Logo et Titre avec Navigation -->
+    <div class="flex items-center space-x-6">
+      <!-- Logo -->
+      <img src="Cinema Logo Design Шаблон _ Премиум векторы.jpeg" alt="Logo du festival" class="h-10 w-auto">
+      <!-- Titre et Navigation -->
+      <div class="flex items-center space-x-20">
+        <!-- Titre -->
+        <h1 class="text-3xl font-bold max-w-fit">Doc à Tunis</h1>    
+        <!-- Navigation -->
+        <ul class="flex space-x-6">
+          <li>
+            <a href="accueil.html" class="hover:underline  text-2xl text-zinc-50 hover:text-cyan-600 active:text-gray-500">
+              Accueil
+            </a>
+          </li>
+          <li>
+            <a href="films.html" class="hover:underline text-2xl text-zinc-50 hover:text-cyan-500 active:text-gray-800">
+              Films
+            </a>
+          </li>
+          <li>
+            <a href="schedule.html" class="hover:underline text-2xl text-zinc-50 hover:text-cyan-500 active:text-gray-800">
+              Planning
+            </a>
+          </li>
+          <li>
+            <a href="jurys.html" class="hover:underline text-2xl text-red-500 hover:text-cyan-500 active:text-gray-800">
+              Jurys
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="ml-auto relative">
+      <div id="username-box" class="cursor-pointer px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600">Nom d'utilisateur</div>
+      <button id="logout-btn" class=" cursor-pointer px-4 py-1 bg-gray-600 text-white rounded-md hover:bg-red-700 hidden">Déconnexion</button>
+  </div>
+  </div>
+
+</nav>
+
+    <!-- Header -->
+    <header class="text-center py-12 bg-white shadow-md">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">Jury du Festival "Doc à Tunis"</h1>
+        <p class="text-xl text-gray-600">Rencontrez les membres exceptionnels qui composent le jury de cette édition.</p>
+    </header>
+
+    <!-- Section Jury -->
+    <section class="container mx-auto px-4 py-12">
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden text-center">
+                <div class="p-6">
+                    <img src="imagefilm/dupont.webp" alt="Jean Dupont" class="w-40 h-40 object-cover rounded-full mx-auto mb-4 shadow-md">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-2">Jean Dupont(français)</h2>
+                    <p class="text-gray-600 mb-4">Membre du Jury</p>
+                    <p class="text-gray-500 text-sm px-2">Un professionnel expérimenté du monde du cinéma.</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden text-center">
+                <div class="p-6">
+                    <img src="imagefilm/Ahmed.jpg" alt="Maria Ahmed Ben Ali" class="w-40 h-40 object-cover rounded-full mx-auto mb-4 shadow-md">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-2">Maria Ahmed Ben Ali(tunisienne)</h2>
+                    <p class="text-gray-600 mb-4">Membre du Jury</p>
+                    <p class="text-gray-500 text-sm px-2">Reconnue pour sa contribution au cinéma méditerranéen.</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden text-center">
+                <div class="p-6">
+                    <img src="imagefilm/leila khaled.jpg" alt="Leila Khaled" class="w-40 h-40 object-cover rounded-full mx-auto mb-4 shadow-md">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-2">Leila Khaled (Palestine)</h2>
+                    <p class="text-gray-600 mb-4">Membre du Jury</p>
+                    <p class="text-gray-500 text-sm px-2">Elle est actuellement membre du Conseil national palestinien</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden text-center">
+                <div class="p-6">
+                    <img src="imagefilm/john Smith.jpg" alt="John Smith" class="w-40 h-40 object-cover rounded-full mx-auto mb-4 shadow-md">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-2">John Smith (anglais)</h2>
+                    <p class="text-gray-600 mb-4">Membre du Jury</p>
+                    <p class="text-gray-500 text-sm px-2">Expert international en art cinématographique.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-4">
+        <p>&copy; 2024 Doc à Tunis. Tous droits réservés.</p>
+    </footer>
+</body>
+<script>
+    
+document.addEventListener('DOMContentLoaded', async () => {
+    const usernameBox = document.getElementById('username-box');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    // Fonction pour vérifier la session
+    async function checkSession() {
+        try {
+            const response = await fetch('/check-session');
+            const data = await response.json();
+            
+            if (data.loggedIn) {
+                usernameBox.textContent = data.username;
+                return true;
+            } else {
+                window.location.href = 'first.html'; // Redirection si non connecté
+                return false;
+            }
+        } catch (error) {
+            console.error('Erreur lors de la vérification de la session:', error);
+            return false;
+        }
+    }
+
+    // Vérifier la session au chargement
+    await checkSession();
+
+    // Gestionnaire pour le bouton de déconnexion
+    logoutBtn.addEventListener('click', async () => {
+        try {
+            const response = await fetch('/logout', {
+                method: 'POST'
+            });
+            
+            if (response.ok) {
+                localStorage.removeItem('username');
+                window.location.href = 'first.html';
+            }
+        } catch (error) {
+            console.error('Erreur lors de la déconnexion:', error);
+        }
+    });
+
+    // Afficher/cacher le bouton de déconnexion
+    usernameBox.addEventListener('click', () => {
+        usernameBox.classList.add('hidden');
+        logoutBtn.classList.remove('hidden');
+    });
+});
+
+</script>
+</html>

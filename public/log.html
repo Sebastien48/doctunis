@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire d'inscription</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <style>
+        body {
+            background-image: url(les-films-incontournables-du-cinema-w_2524x884.jpg);
+            background-size: cover;
+            background-position: center;
+        }
+        .form-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #e3342f;
+        }
+    </style>
+
+    <div class="form-container p-8 shadow-lg w-full max-w-2xl">
+        <h1>S'inscrire</h1>
+        <form id="registrationForm" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="nom" class="block text-xl font-medium text-gray-700">Nom</label>
+                    <input type="text" id="nom" name="nom" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-600" required>
+                    <div id="errorNom" class="text-red-500 text-sm hidden">Nom invalide.</div>
+                </div>
+                <div>
+                    <label for="prenom" class="block text-xl font-medium text-gray-700">Prénom</label>
+                    <input type="text" id="prenom" name="prenom" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-600" required>
+                    <div id="errorPrenom" class="text-red-500 text-sm hidden">Prénom invalide.</div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="email" class="block text-xl font-medium text-gray-700">Email</label>
+                    <input type="email" id="email" name="email" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-600" required>
+                    <div id="errorEmail" class="text-red-500 text-sm hidden">Email invalide.</div>
+                </div>
+                <div>
+                    <label for="username" class="block text-xl font-medium text-gray-700">Nom d'utilisateur</label>
+                    <input type="text" id="username" name="username" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-600" required>
+                    <div id="errorUsername" class="text-red-500 text-sm hidden">Nom d'utilisateur invalide.</div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="password" class="block text-xl font-medium text-gray-700">Mot de passe</label>
+                    <input type="password" id="mot_de_passe" name="password" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-600" required>
+                    <div id="errorPassword" class="text-red-500 text-sm hidden">Mot de passe trop court.</div>
+                </div>
+                <div>
+                    <label for="confirmPassword" class="block text-xl font-medium text-gray-700">Confirmation</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-red-600" required>
+                    <div id="errorConfirmPassword" class="text-red-500 text-sm hidden">Les mots de passe ne correspondent pas.</div>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <button id="submitButton" type="submit" class="w-full py-2 bg-gray-500 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-red-800 transition" disabled>CONTINUER</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const nomInput = document.getElementById('nom');
+        const prenomInput = document.getElementById('prenom');
+        const emailInput = document.getElementById('email');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('mot_de_passe');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const submitButton = document.getElementById('submitButton');
+
+        const validateForm = () => {
+            let isValid = true;
+
+            const showError = (id, condition) => {
+                const errorElement = document.getElementById(id);
+                if (condition) {
+                    errorElement.classList.remove('hidden');
+                    isValid = false;
+                } else {
+                    errorElement.classList.add('hidden');
+                }
+            };
+
+            const namePattern = /^[A-Za-zÀ-ÖØ-öø-ÿ-]+$/;
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            showError('errorNom', !namePattern.test(nomInput.value.trim()));
+            showError('errorPrenom', !namePattern.test(prenomInput.value.trim()));
+            showError('errorEmail', !emailPattern.test(emailInput.value.trim()));
+            showError('errorUsername', usernameInput.value.trim().length < 5);
+            showError('errorPassword', passwordInput.value.trim().length < 6);
+            showError('errorConfirmPassword', passwordInput.value !== confirmPasswordInput.value);
+
+            submitButton.disabled = !isValid;
+
+            // Changer la couleur du bouton si valide
+            if (isValid) {
+                submitButton.classList.remove('bg-gray-500');
+                submitButton.classList.add('bg-red-600');
+            } else {
+                submitButton.classList.remove('bg-red-600');
+                submitButton.classList.add('bg-gray-500');
+            }
+        };
+
+        [nomInput, prenomInput, emailInput, usernameInput, passwordInput, confirmPasswordInput].forEach(input => {
+            input.addEventListener('input', validateForm);
+        });
+    </script>
+</body>
+</html>

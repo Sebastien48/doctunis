@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Festival des Films Documentaires</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+ <!-- Barre de menu -->
+ <nav class="bg-gray-800 text-white p-4">
+    <div class="container mx-auto flex items-center">
+      <!-- Logo et Titre avec Navigation -->
+      <div class="flex items-center space-x-6">
+        <!-- Logo -->
+        <img src="Cinema Logo Design Шаблон _ Премиум векторы.jpeg" alt="Logo du festival" class="h-10 w-auto">
+        <!-- Titre et Navigation -->
+        <div class="flex items-center space-x-20">
+          <!-- Titre -->
+          <h1 class="text-3xl font-bold max-w-fit">Doc à Tunis</h1>    
+          <!-- Navigation -->
+          <ul class="flex space-x-6">
+            <li>
+              <a href="accueil.html" class="hover:underline  text-2xl text-zinc-50 hover:text-cyan-600 active:text-gray-500">
+                Accueil
+              </a>
+            </li>
+            <li>
+              <a href="films.html" class="hover:underline text-2xl text-red-500 hover:text-cyan-500 active:text-gray-800">
+                Films
+              </a>
+            </li>
+            <li>
+              <a href="schedule.html" class="hover:underline text-2xl text-zinc-50 hover:text-cyan-500 active:text-gray-800">
+                Planning
+              </a>
+            </li>
+            <li>
+              <a href="jurys.html" class="hover:underline text-2xl text-zinc-50 hover:text-cyan-500 active:text-gray-800">
+                Jurys
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="ml-auto relative">
+        <div id="username-box" class="cursor-pointer px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600">Nom d'utilisateur</div>
+        <button id="logout-btn" class=" cursor-pointer px-4 py-1 bg-gray-600 text-white rounded-md hover:bg-red-700 hidden">Déconnexion</button>
+    </div>
+    </div>
+
+    
+
+
+  </nav>
+
+    <main class="container mx-auto px-4 py-8">
+        <h1 class="font-mono text-3xl text-gray-700 font-semibold ml-10 mb-6 underline">DÉCOUVRIR LES FILMS</h1>
+
+        <div class="grid md:grid-cols-2 gap-6">
+            <!-- Section Films Africains -->
+            <section class="bg-white shadow-lg rounded-lg p-6">
+                <h2 class="text-2xl font-semibold text-blue-600 mb-4 underline">Films Africains</h2>
+                <div class="space-y-4">
+                    <!-- Film Timbuktu -->
+                    <div class="border-b pb-4 flex items-center">
+                        <img src="imagefilm/aa.jpeg" alt="Timbuktu" class="w-32 h-24 object-cover mr-4 rounded">
+                        <div>
+                            <h3 class="font-bold text-lg">Timbuktu</h3>
+                            <p class="text-gray-600">Réalisateur: Abderrahmane Sissako (Mauritanie)</p>
+                            <p class="text-sm text-gray-500">Un film sur la vie sous l'occupation djihadiste</p>
+                        </div>
+                    </div>
+                    <!-- Film Atlantics -->
+                    <div class="border-b pb-4 flex items-center">
+                        <img src="imagefilm/MV5BNGY1NTZhMTAtMjc2Ni00OGM1LTliMmUtM2I0MDQ2OTQ1NWJkXkEyXkFqcGc@._V1_.jpg" alt="Atlantics" class="w-32 h-24 object-cover mr-4 rounded">
+                        <div>
+                            <h3 class="font-bold text-lg">Atlantics</h3>
+                            <p class="text-gray-600">Réalisatrice: Mati Diop (Sénégal)</p>
+                            <p class="text-sm text-gray-500">Un conte fantomatique sur l'immigration</p>
+                        </div>
+                    </div>
+                    <!-- Other African Films -->
+                    <div class="border-b pb-4 flex items-center">
+                        <img src="imagefilm/divan tunis.jpeg" alt="Diva à Tunis" class="w-32 h-24 object-cover mr-4 rounded">
+                        <div>
+                            <h3 class="font-bold text-lg">Divan à Tunis (2019)</h3>
+                            <p class="text-gray-600">Réalisatrice: Manele Labidi (Tunisienne)</p>
+                            <p class="text-sm text-gray-500">Une comédie sociale confrontant avec humour les défis culturels et administratifs de la Tunisie post-révolutionnaire</p>
+                        </div>
+                    </div>
+                    <!-- Additional Films -->
+                    <div class="border-b pb-4 flex items-center">
+                        <img src="imagefilm/331_LHOMMEQUIAVW0189010_BAN1_2424_NEWTV_HD.jpg" alt="L'homme qui a perdu sa peau" class="w-32 h-24 object-cover mr-4 rounded">
+                        <div>
+                            <h3 class="font-bold text-lg">L'homme qui a perdu sa peau (2019)</h3>
+                            <p class="text-gray-600">Réalisatrice: Kaouther Ben Hania (Tunisienne)</p>
+                            <p class="text-sm text-gray-500">L'histoire d'un réfugié syrien qui, pour fuir la guerre, devient une œuvre d'art vivante</p>
+                        </div>
+                    </div>
+                    <div class="border-b pb-4 flex items-center">
+                        <img src="imagefilm/nuit des rois.jpeg" alt="La nuit des rois" class="w-32 h-24 object-cover mr-4 rounded">
+                        <div>
+                            <h3 class="font-bold text-lg">La nuit des rois (2020)</h3>
+                            <p class="text-gray-600">Réalisateur: Philippe Lacôte (Ivoirien)</p>
+                            <p class="text-sm text-gray-500">Un drame mystique sur le pouvoir et la narration dans une prison ivoirienne</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section Films Internationaux -->
+            <section class="bg-white shadow-lg rounded-lg p-6">
+                <h2 class="text-2xl font-semibold text-green-600 mb-4 underline">Films Internationaux</h2>
+                <div class="space-y-4">
+                    <div class="border-b pb-4 flex items-center">
+                        <img src="imagefilm/MV5BNGY1NTZhMTAtMjc2Ni00OGM1LTliMmUtM2I0MDQ2OTQ1NWJkXkEyXkFqcGc@._V1_.jpg" alt="The Cave" class="w-32 h-24 object-cover mr-4 rounded">
+                        <div>
+                            <h3 class="font-bold text-lg">The Cave</h3>
+                            <p class="text-gray-600">Réalisateur: Feras Fayyad (Syrie)</p>
+                            <p class="text-sm text-gray-500">Un documentaire sur un hôpital souterrain en Syrie</p>
+                        </div>
+                    </div>
+                    <div class="border-b pb-4 flex items-center">
+                        <img src="imagefilm/MV5BOTQ0MzVlOGUtMzhhOS00NGY0LTgxMGQtMWIzY2FiNjU0ZDhjXkEyXkFqcGc@._V1_.jpg" alt="For Sama" class="w-32 h-24 object-cover mr-4 rounded">
+                        <div>
+                            <h3 class="font-bold text-lg">For Sama</h3>
+                            <p class="text-gray-600">Réalisatrice: Waad Al-Kateab (Royaume-Uni/Syrie)</p>
+                            <p class="text-sm text-gray-500">Un récit personnel de la guerre civile syrienne</p>
+                        </div>
+                    </div>
+                    <div class="border-b pb-4 flex items-center">
+                        <img src="imagefilm/french dispatch.jpg" alt="The French Dispatch" class="w-32 h-24 object-cover mr-4 rounded">
+                        <div>
+                            <h3 class="font-bold text-lg">The French Dispatch (2021)</h3>
+                            <p class="text-gray-600">Réalisateur: Wes Anderson (États-Unis)</p>
+                            <p class="text-sm text-gray-500">Une lettre d'amour à la presse dans une ville française imaginaire</p>
+                        </div>
+                    </div>
+                    <div class="border-b pb-4 flex items-center">
+                        <img src="imagefilm/les olimpiades.jpg" alt="Les Olympiades" class="w-32 h-24 object-cover mr-4 rounded">
+                        <div>
+                            <h3 class="font-bold text-lg">Les Olympiades (2021)</h3>
+                            <p class="text-gray-600">Réalisateur: Jacques Audiard (France)</p>
+                            <p class="text-sm text-gray-500">L'histoire de quatre jeunes adultes dans le quartier des Olympiades à Paris</p>
+                        </div>
+                    </div>
+                    <div class="border-b pb-4 flex items-center">
+                        <img src="imagefilm/hiddenblade.jpg" alt="Hidden Blade" class="w-32 h-24 object-cover mr-4 rounded">
+                        <div>
+                            <h3 class="font-bold text-lg">Hidden Blade (2023)</h3>
+                            <p class="text-gray-600">Réalisateur: Non spécifié</p>
+                            <p class="text-sm text-gray-500">Un film d'action historique sur la résistance chinoise pendant la guerre sino-japonaise</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Section Acteurs -->
+        <!-- Section Acteurs avec deux colonnes -->
+<section class="bg-white shadow-lg rounded-lg p-6 mt-8">
+    <h2 class="text-2xl font-semibold text-purple-600 mb-4 underline">Quelques Acteurs</h2>
+    <div class="grid grid-cols-2 gap-4">
+        <!-- Colonne Gauche -->
+        <div class="space-y-4">
+            <div class="flex items-center">
+                <img src="imagefilm/isaka.jpg" alt="Issaka Sawadogo" class="w-20 h-20 object-cover rounded-full mr-4">
+                <p class="font-bold">Issaka Sawadogo (Burkina Faso) - 48 ans</p>
+            </div>
+            <div class="flex items-center">
+                <img src="imagefilm/salma-abou-edited.png" alt="Salma Zahra" class="w-20 h-20 object-cover rounded-full mr-4">
+                <p class="font-bold">Salma Zahra (Tunisie) - 34 ans</p>
+            </div>
+            <div class="flex items-center">
+                <img src="imagefilm/Emma_Watson_2013.jpg" alt="Emma Watson" class="w-20 h-20 object-cover rounded-full mr-4">
+                <p class="font-bold">Emma Watson (Royaume-Uni) - 33 ans</p>
+            </div>
+        </div>
+        
+        <!-- Colonne Droite -->
+        <div class="space-y-4">
+            <div class="flex items-center">
+                <img src="imagefilm/Leonardo-DiCaprio.jpg" alt="Leonardo DiCaprio" class="w-20 h-20 object-cover rounded-full mr-4">
+                <p class="font-bold">Leonardo DiCaprio - 50 ans</p>
+            </div>
+            <div class="flex items-center">
+                <img src="imagefilm/michel-gohou-550x420-1.webp" alt="Michel Gohou Doukrou" class="w-20 h-20 object-cover rounded-full mr-4">
+                <p class="font-bold">Michel Gohou Doukrou - 61 ans</p>
+            </div>
+            <div class="flex items-center">
+                <img src="imagefilm/omar sy.jpg" alt="Omar Sy" class="w-20 h-20 object-cover rounded-full mr-4">
+                <p class="font-bold">Omar Sy (France) - 45 ans</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+        <!-- Section Producteurs et Réalisateurs -->
+        <section class="bg-white shadow-lg rounded-lg p-6 mt-8">
+            <h2 class="text-2xl font-semibold text-red-600 mb-4 underline">Producteurs et Réalisateurs</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex items-center">
+                    <img src="imagefilm/Bong_Joon-ho_2017.jpg" alt="Bong Joon-ho" class="w-20 h-20 object-cover rounded-full mr-4">
+                    <div>
+                        <h3 class="font-bold">Bong Joon-ho (55 ans - Corée du Sud)</h3>
+                        <p class="text-gray-600">Films: Parasite, Snowpiercer</p>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <img src="imagefilm/Alfonso_Cuarón_at_the_2024_Toronto_International_Film_Festival_2_(2).jpg" alt="Alfonso Cuarón" class="w-20 h-20 object-cover rounded-full mr-4">
+                    <div>
+                        <h3 class="font-bold">Alfonso Cuarón (63 ans - Mexique)</h3>
+                        <p class="text-gray-600">Films: Roma, Gravity</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+<script>
+   
+document.addEventListener('DOMContentLoaded', async () => {
+    const usernameBox = document.getElementById('username-box');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    // Fonction pour vérifier la session
+    async function checkSession() {
+        try {
+            const response = await fetch('/check-session');
+            const data = await response.json();
+            
+            if (data.loggedIn) {
+                usernameBox.textContent = data.username;
+                return true;
+            } else {
+                window.location.href = 'first.html'; // Redirection si non connecté
+                return false;
+            }
+        } catch (error) {
+            console.error('Erreur lors de la vérification de la session:', error);
+            return false;
+        }
+    }
+
+    // Vérifier la session au chargement
+    await checkSession();
+
+    // Gestionnaire pour le bouton de déconnexion
+    logoutBtn.addEventListener('click', async () => {
+        try {
+            const response = await fetch('/logout', {
+                method: 'POST'
+            });
+            
+            if (response.ok) {
+                localStorage.removeItem('username');
+                window.location.href = 'first.html';
+            }
+        } catch (error) {
+            console.error('Erreur lors de la déconnexion:', error);
+        }
+    });
+
+    // Afficher/cacher le bouton de déconnexion
+    usernameBox.addEventListener('click', () => {
+        usernameBox.classList.add('hidden');
+        logoutBtn.classList.remove('hidden');
+    });
+});
+
+</script>
+</html>

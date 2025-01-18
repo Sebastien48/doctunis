@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planning Publié</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <header class="flex items-center justify-between bg-gray-900 p-4">
+        <h1 class="text-3xl text-white font-bold">Projections Publiées</h1>
+    </header>
+
+    <div class="container mx-auto p-6">
+        <div id="projections-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Les détails des projections seront affichés ici -->
+        </div>
+    </div>
+
+    <footer class="bg-gray-800 text-white py-4 mt-12">
+        <div class="container mx-auto text-center">
+            <p class="text-sm">&copy; 2024 DOC A TUNIS (Festival de Films Documentaires)</p>
+        </div>
+    </footer>
+
+    <script>
+        // Récupérer les projections depuis localStorage
+        const projections = JSON.parse(localStorage.getItem('projections'));
+
+        if (projections && projections.length > 0) {
+            const projectionsList = document.getElementById('projections-list');
+
+            projections.forEach(projection => {
+                const dateFormattee = new Date(projection.date).toLocaleDateString('fr-FR', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+
+                const projectionDetails = document.createElement('div');
+                projectionDetails.className = 'bg-white shadow-md rounded-lg p-6 flex flex-col';
+                projectionDetails.innerHTML = `
+
+                ${projection.image ? `
+                        <div class="mt-4">
+                            <img src="${projection.image}" alt="Image du Film" class="w-full h-60 object-cover rounded-lg">
+                        </div>
+                    ` : ''}
+                    <h2 class="text-2xl text-center underline font-bold mb-4 text-red-500">${projection.titre}</h2>
+
+                    <div class="flex-1">
+                        <p><strong>Date :</strong> ${dateFormattee}</p>
+                        <p><strong>Heure :</strong> ${projection.heure}</p>
+                        <p><strong>Salle :</strong> ${projection.salle}</p>
+                    </div>
+                    
+                `;
+
+                projectionsList.appendChild(projectionDetails);
+            });
+        } else {
+            alert('Aucune projection publiée');
+        }
+    </script>
+</body>
+</html>
