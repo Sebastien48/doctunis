@@ -1,5 +1,3 @@
-//comment je fais un layout pour les page utilisateurs 
- 
 "use client";
 import React from 'react';
 import {usePathname} from 'next/navigation';
@@ -9,12 +7,20 @@ import Link from 'next/link';
 
 import { 
   Home, Bus, Plane, Package, User, History, Settings, 
-  Menu, X, LogOut, HelpCircle, Bell, Search 
+  Menu, X, LogOut, HelpCircle, Bell, Search, ChevronDown 
 } from 'lucide-react';
 
 export default function DashboardLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const pathname = usePathname();
+  const personne = "John Doe"; 
+  
+  // Fonction pour vérifier si on est dans une section paramètres
+  const isInSettings = pathname.startsWith('/dashboard/profil') || 
+                      pathname.startsWith('/dashboard/historique') || 
+                      pathname.startsWith('/dashboard/parametres') ||
+                      pathname.startsWith('/aide');
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -67,36 +73,70 @@ export default function DashboardLayout({ children }) {
             label="Colis"
             isActive={pathname.startsWith('/dashboard/colis')}
           />
-          <NavItem 
-            href="/dashboard/profil" 
-            icon={<User size={18} />} 
-            label="Profil"
-            isActive={pathname.startsWith('/dashboard/profil')}
-          />
-          <NavItem 
-            href="/dashboard/historique" 
-            icon={<History size={18} />} 
-            label="Historique"
-            isActive={pathname.startsWith('/dashboard/historique')}
-          />
-          <NavItem 
-            href="/dashboard/parametres" 
-            icon={<Settings size={18} />} 
-            label="Paramètres"
-            isActive={pathname.startsWith('/dashboard/parametres')}
-          />
           
-          <div className="pt-8 mt-8 border-t border-gray-200">
-            <NavItem 
-              href="/aide" 
-              icon={<HelpCircle size={18} />} 
-              label="Aide & Support"
-            />
+          {/* Section Paramètres avec sous-menu */}
+          <div className="space-y-1">
+            <button
+              onClick={() => setSettingsOpen(!settingsOpen)}
+              className={`w-full flex items-center justify-between gap-3 p-3 rounded-lg transition ${
+                isInSettings 
+                  ? 'bg-blue-50 text-blue-700 font-medium' 
+                  : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600'
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <div className={isInSettings ? 'text-blue-600' : 'text-gray-500'}>
+                  <Settings size={18} />
+                </div>
+                <span>Paramètres</span>
+              </div>
+              <ChevronDown 
+                size={16} 
+                className={`transition-transform ${settingsOpen ? 'rotate-180' : ''}`}
+              />
+            </button>
+            
+            {/* Sous-menu des paramètres */}
+            {settingsOpen && (
+              <div className="ml-6 space-y-1 border-l-2 border-gray-200 pl-4">
+                <NavItem 
+                  href="/dashboard/profil" 
+                  icon={<User size={16} />} 
+                  label="Profil"
+                  isActive={pathname.startsWith('/dashboard/profil')}
+                  isSubItem={true}
+                />
+                <NavItem 
+                  href="/dashboard/historique" 
+                  icon={<History size={16} />} 
+                  label="Historique"
+                  isActive={pathname.startsWith('/dashboard/historique')}
+                  isSubItem={true}
+                />
+                <NavItem 
+                  href="/dashboard/parametres" 
+                  icon={<Settings size={16} />} 
+                  label="Paramètres"
+                  isActive={pathname.startsWith('/dashboard/parametres')}
+                  isSubItem={true}
+                />
+                <NavItem 
+                  href="/aide" 
+                  icon={<HelpCircle size={16} />} 
+                  label="Aide & Support"
+                  isActive={pathname.startsWith('/aide')}
+                  isSubItem={true}
+                />
+              </div>
+            )}
+          </div>
+          
+          {/* Bouton déconnexion remonté */}
+          <div className="pt-4 mt-4 border-t border-gray-200">
             <NavItem 
               href="/" 
               icon={<LogOut size={18} />} 
               label="Déconnexion"
-              
             />
           </div>
         </nav>
@@ -126,16 +166,27 @@ export default function DashboardLayout({ children }) {
             </div>
             
             <div className="flex items-center space-x-4">
-              <button className="relative text-gray-600 hover:text-blue-600">
+              {/* Bouton notifications cliquable */}
+              <Link 
+                href="/dashboard/notifications"
+                className="relative text-gray-600 hover:text-blue-600 transition-colors"
+              >
                 <Bell size={24} />
-                <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
-              </button>
-              <div className="flex items-center">
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+              </Link>
+              
+              {/* Profil utilisateur cliquable */}
+              <Link 
+                href="/dashboard/profil"
+                className="flex items-center hover:bg-gray-50 rounded-lg p-2 transition-colors"
+              >
                 <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
                   <User size={18} className="text-blue-600" />
                 </div>
-                <span className="ml-2 hidden md:inline text-gray-700">John Doe</span>
-              </div>
+                <span className="ml-2 hidden md:inline text-gray-700 hover:text-blue-600 transition-colors">
+                  {personne}
+                </span>
+              </Link>
             </div>
           </div>
         </header>
@@ -153,7 +204,8 @@ function NavItem({
   href, 
   icon, 
   label, 
-  isActive = false 
+  isActive = false,
+  isSubItem = false 
 }) {
   return (
     <Link 
@@ -161,8 +213,8 @@ function NavItem({
       className={`flex items-center gap-3 p-3 rounded-lg transition ${
         isActive 
           ? 'bg-blue-50 text-blue-700 font-medium' 
-          : 'text-gray-600 hover:bg-gray-100 hover:text-blue-600'
-      }`}
+          : 'text-gray-600 hover:bg-gray-100 hover:text-red-600'
+      } ${isSubItem ? 'py-2 text-sm' : ''}`}
     >
       <div className={isActive ? 'text-blue-600' : 'text-gray-500'}>{icon}</div>
       <span>{label}</span>
