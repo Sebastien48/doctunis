@@ -1,0 +1,132 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+enum MethodePaiement {
+  carte
+  mobile_money
+  espece
+  virement
+}
+
+model utilisateurs {
+  id           Int      @id @default(autoincrement())
+  nom          String
+  prenom       String
+  email        String   @unique
+  telephone    String
+  mot_de_passe String
+  role         String   @default("utilisateur")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  deletedAt    DateTime?
+
+  reservations Reservation[] // 🔁 relation inverse
+}
+
+model Voyage {
+  id               Int      @id @default(autoincrement())
+  type             String   // Type de voyage (voyage, séjour, événement)
+  titre            String   @db.VarChar(255)
+  description      String?
+  prix             Float
+  placesDisponible Int
+  image            String?  // Chemin d'accès ou URL de l'image
+  départ           String   @db.VarChar(100)
+  destination      String   @db.VarChar(100)
+  date             DateTime // Date principale (départ ou événement)
+  heure            String?  @db.VarChar(5) // Format HH:mm
+  dateFinSejour    DateTime? // Pour les séjours
+  categorie        String   @db.VarChar(50) // économique, normale, premium
+  moyensTransport  String   @db.VarChar(100)
+  published        Boolean  @default(false)
+  
+  // Pour les événements
+  lieu             String?  @db.VarChar(255)
+  organisateur     String?  @db.VarChar(255)
+  
+  // Pour les séjours
+  hotel            String?  @db.VarChar(255)
+  activites        String?  // Stocké en JSON ou liste séparée par des virgules
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  reservations     Reservation[]
+}
+
+model Reservation {
+  id              Int           @id @default(autoincrement())
+  nom             String
+  prenom          String
+  email           String
+  telephone       String
+  placesPrise     Int
+  prixReservation Int
+  status          String        @default("en_attente")
+
+  voyage          Voyage        @relation(fields: [voyageId], references: [id])
+  voyageId        Int
+
+  utilisateurs    utilisateurs  @relation(fields: [utilisateursId], references: [id])
+  utilisateursId  Int
+    paiement      Paiement? 
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+
+model Paiement {
+  id              Int              @id @default(autoincrement())
+  montant         Float
+  methode         MethodePaiement
+  statut          String           @default("en_attente")
+  datePaiement    DateTime         @default(now())
+
+  // Relation 1:1 avec la réservation
+  reservation     Reservation?     @relation(fields: [reservationId], references: [id])
+  reservationId   Int?             @unique
+
+  // Relation 1:1 avec le colis
+  colis           Colis?           @relation(fields: [colisId], references: [id])
+  colisId         Int?             @unique
+}
+model Colis {
+  id                    Int        @id @default(autoincrement())
+  utilisateurNom        String
+  utilisateurPrenom     String
+  utilisateurEmail      String
+  utilisateurTelephone  String
+  depart                String
+  destination           String
+  image                 String
+
+  // Champs définis par l'utilisateur
+  dateEnvoi             DateTime
+  heureEnvoi            String
+  moyensTransport        String
+
+  // Champs définis par l'admin
+  prix                  Int?
+  dateRetour            DateTime?
+  heureRetour           String?
+  status                String     @default("en_attente") // validé, refusé
+
+  createdAt             DateTime   @default(now())
+   paiement      Paiement? 
+}
+
