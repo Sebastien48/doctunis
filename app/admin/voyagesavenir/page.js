@@ -6,31 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Trash2, Edit, Eye, Upload, Plus } from "lucide-react";
-
-// Liste des villes disponibles
-const VILLES = [
-  "Dakar", "Thiès", "Saint-Louis", "Ziguinchor", "Kaolack",
-  "Tambacounda", "Kolda", "Matam", "Kaffrine", "Fatick",
-  "Louga", "Sédhiou", "Kédougou", "Diourbel", "Richard Toll",
-  "Mbour", "Touba", "Mbacké", "Joal-Fadiouth", "Bignona"
-];
-
-// Hôtels connus
-const HOTELS = [
-  "Hôtel du Golf (Abidjan, Côte d'Ivoire)",
-  "King Fahd Palace (Dakar)",
-  "Radisson Blu (Dakar)",
-  "Terrou-Bi (Dakar)",
-  "Lodge des Collines de Niokolo (Kédougou)",
-  "Sobo Badè (Cap Skirring)",
-  "Le Djoloff (Saint-Louis)",
-  "La Paillote (Saly)",
-  "Le Ngor (Dakar)",
-  "Saly Portudal"
-];
-
-// Moyens de transport disponibles
-const TRANSPORTS = ["Bus", "Train", "Avion", "Bateau"];
+import VoyageList from "./components/VoyageList";
+import { VILLES, HOTELS, TRANSPORTS } from "./data";
 
 export default function AdminVoyagesAvenir() {
   const router = useRouter();
@@ -39,20 +16,19 @@ export default function AdminVoyagesAvenir() {
   const [error, setError] = useState('');
   const [newActivity, setNewActivity] = useState('');
 
-  // État initial du formulaire
+  // État initial corrigé (categorie comme chaîne)
   const [formData, setFormData] = useState({
     type: "voyage",
     prix: "",
-    places: "",
+    placesDisponible: "",
     image: null,
-    categorie: "normale",
+    categorie: "", // Chaîne unique
     options: {
       repas: false,
       wifi: false,
       climatisation: false,
       bagages: false,
     },
-    // Champs spécifiques aux voyages
     départ: "",
     destination: "",
     dateDepart: "",
@@ -60,16 +36,13 @@ export default function AdminVoyagesAvenir() {
     typeVoyage: "aller-simple",
     dateRetour: "",
     heureRetour: "",
-    moyenTransport: "",
-    // Champs spécifiques aux séjours
+    moyensTransport: "",
     duree: "",
     hotel: "",
     activites: [],
-    // Ajout des champs pour séjours
     départSejour: "",
     destinationSejour: "",
     dateDepartSejour: "",
-    // Champs spécifiques aux événements
     titre: "",
     description: "",
     lieu: "",
@@ -81,24 +54,36 @@ export default function AdminVoyagesAvenir() {
     moyenTransportEvent: "",
   });
 
-  // Chargement des voyages existants
-
+  useEffect(() => {
+    const fetchVoyages = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/voyage');
+        if (response.ok) {
+          const data = await response.json();
+          setVoyages(data);
+        }
+      } catch (err) {
+        setError('Erreur lors du chargement des données');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchVoyages();
+  }, []);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault();;
     setError('');
 
-    // Validation des champs obligatoires
-    const requiredFields = ['prix', 'places'];
+    const requiredFields = ['prix', 'placesDisponible',];
     let missingFields = [];
 
-    // Validation spécifique par type
     if (formData.type === "voyage") {
-      if (!formData.départ || !formData.destination || !formData.moyenTransport) {
-        missingFields.push(...['départ', 'destination', 'moyenTransport'].filter(field => !formData[field]));
+      if (!formData.départ || !formData.destination || !formData.moyensTransport) {
+        missingFields.push(...['départ', 'destination', 'moyensTransport'].filter(field => !formData[field]));
       }
     } else if (formData.type === "sejour") {
-      // Ajout des champs obligatoires pour les séjours
       const requiredSejourFields = ['hotel', 'départSejour', 'destinationSejour', 'dateDepartSejour'];
       requiredSejourFields.forEach(field => {
         if (!formData[field]) missingFields.push(field);
@@ -109,7 +94,6 @@ export default function AdminVoyagesAvenir() {
       }
     }
 
-    // Vérification des champs communs
     requiredFields.forEach(field => {
       if (!formData[field]) missingFields.push(field);
     });
@@ -119,44 +103,57 @@ export default function AdminVoyagesAvenir() {
       return;
     }
 
-    try {
-      setLoading(true);
-      const formDataToSend = new FormData();
+     try {
+    setLoading(true);
+    const formDataToSend = new FormData();
 
-      // Ajout des champs au FormData
-      Object.entries(formData).forEach(([key, value]) => {
-        if (key === 'options' || key === 'activites') {
-          formDataToSend.append(key, JSON.stringify(value));
-        } else if (key !== 'image') {
-          formDataToSend.append(key, value);
-        }
-      });
-
-      // Ajout de l'image si elle existe
-      if (formData.image) {
-        formDataToSend.append('image', formData.image);
+    // 1. Ajouter tous les champs TEXTUELS
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key === 'options' || key === 'activites') {
+        formDataToSend.append(key, JSON.stringify(value));
+      } else if (key !== 'image' && typeof value !== 'object') {
+        formDataToSend.append(key, value);
       }
+    });
 
-      const url = formData.id ? `/api/voyage/${formData.id}` : "/api/voyage";
-      const method = formData.id ? "PUT" : "POST";
+    // 2. Ajouter l'IMAGE séparément si elle existe
+    if (formData.image && formData.image instanceof File) {
+      formDataToSend.append('image', formData.image);
+    }
 
-      const res = await fetch(url, {
-        method,
+    // 3. Envoyer la requête
+    let response;
+    if (formData.id) {
+      response = await fetch(`/api/voyage/${formData.id}`, {
+        method: "PUT",
+        body: formDataToSend, // Pas besoin de headers, FormData les génère automatiquement
+      });
+    } else {
+      response = await fetch("/api/voyage", {
+        method: "POST",
         body: formDataToSend,
       });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || "Échec de l'opération");
+    }
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        let errorMessage = "Échec de l'opération";
+        try {
+          const errorData = JSON.parse(errorText);
+          errorMessage = errorData.error || errorMessage;
+        } catch (e) {
+          if (errorText) errorMessage = errorText;
+        }
+        throw new Error(errorMessage);
       }
 
       // Réinitialisation du formulaire
       setFormData({
         type: "voyage",
         prix: "",
-        places: "",
+        placesDisponible: "",
         image: null,
-        categorie: "normale",
+        categorie: "normale", // Chaîne unique
         options: {
           repas: false,
           wifi: false,
@@ -170,11 +167,10 @@ export default function AdminVoyagesAvenir() {
         typeVoyage: "aller-simple",
         dateRetour: "",
         heureRetour: "",
-        moyenTransport: "",
+        moyensTransport: "",
         duree: "",
         hotel: "",
         activites: [],
-        // Réinitialisation des nouveaux champs pour séjours
         départSejour: "",
         destinationSejour: "",
         dateDepartSejour: "",
@@ -213,7 +209,10 @@ export default function AdminVoyagesAvenir() {
     } finally {
       setLoading(false);
     }
-  };
+  };//
+
+  
+
 
   // Gestion des changements de champs
   const handleInputChange = (e) => {
@@ -376,17 +375,19 @@ export default function AdminVoyagesAvenir() {
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Catégorie *
           </label>
-          <select
-            name="categorie"
-            value={formData.categorie}
-            onChange={handleInputChange}
-            className="w-full border border-gray-300 rounded-md p-2"
-            required
-          >
-            <option value="economique">Économique</option>
-            <option value="normale">Normale</option>
-            <option value="premium">Premium</option>
-          </select>
+                      <select
+              name="categorie"
+              value={formData.categorie} // Maintenant une chaîne
+              onChange={handleInputChange}
+              className="w-full border border-gray-300 rounded-md p-2"
+              required
+            >
+              <option value="">Sélectionnez une catégorie</option>
+              <option value="normale">Normale</option>
+              <option value="economique">Économique</option>
+              <option value="premium">Premium</option>
+              <option value="Class-A"> Class-A </option>
+            </select>
         </div>
       </div>
 
@@ -441,13 +442,13 @@ export default function AdminVoyagesAvenir() {
           Moyen de transport *
         </label>
         <select
-          name="moyenTransport"
-          value={formData.moyenTransport}
+          name="moyensTransport"
+          value={formData.moyensTransport}
           onChange={handleInputChange}
           className="w-full border border-gray-300 rounded-md p-2"
           required
         >
-          <option value="">Sélectionnez un transport</option>
+         opacity <option value="">Sélectionnez un transport</option>
           {TRANSPORTS.map(transport => (
             <option key={transport} value={transport}>{transport}</option>
           ))}
@@ -458,7 +459,6 @@ export default function AdminVoyagesAvenir() {
 
   const renderSejourSpecificFields = () => (
     <div className="space-y-4">
-      {/* Ajout des champs pour les séjours */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -549,17 +549,19 @@ export default function AdminVoyagesAvenir() {
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Catégorie *
         </label>
-        <select
-          name="categorie"
-          value={formData.categorie}
-          onChange={handleInputChange}
-          className="w-full border border-gray-300 rounded-md p-2"
-          required
-        >
-          <option value="economique">Économique</option>
-          <option value="normale">Normale</option>
-          <option value="premium">Premium</option>
-        </select>
+                    <select
+              name="categorie"
+              value={formData.categorie} // Maintenant une chaîne
+              onChange={handleInputChange}
+              className="w-full border border-gray-300 rounded-md p-2"
+              required
+            >
+              <option value="">Sélectionnez une catégorie</option>
+              <option value="normale">Normale</option>
+              <option value="economique">Économique</option>
+              <option value="premium">Premium</option>
+              <option value="Class-A"> Class-A </option>
+            </select>
       </div>
 
       <div>
@@ -746,7 +748,15 @@ export default function AdminVoyagesAvenir() {
   );
 
   return (
-    <div className="container mx-auto p-4 max-w-6xl">
+    <div className="container mx-auto p-4 max-w-6xl bg-white bg-opacity-90 rounded-lg shadow-lg" 
+         style={{ 
+           backgroundImage: "url('/images/egypte.jpg')", 
+           backgroundSize: 'cover',
+           backgroundPosition: 'center',
+           backgroundRepeat: 'no-repeat',
+           minHeight: '100vh',
+           width: '100%', 
+         }}>
       <h1 className="text-3xl font-bold mb-6 text-center">Gestion des Voyages, Séjours & Événements</h1>
       
       {error && (
@@ -811,10 +821,10 @@ export default function AdminVoyagesAvenir() {
                   Places disponibles *
                 </label>
                 <input
-                  name="places"
+                  name="placesDisponible"
                   type="number"
                   placeholder="Nombre de places"
-                  value={formData.places}
+                  value={formData.placesDisponible}
                   onChange={handleInputChange}
                   className="w-full border border-gray-300 rounded-md p-2"
                   required
@@ -886,153 +896,14 @@ export default function AdminVoyagesAvenir() {
         </CardContent>
       </Card>
 
-      {/* Liste des éléments */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Éléments enregistrés ({voyages.length})</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {loading && voyages.length === 0 ? (
-            <div className="text-center py-8">
-              <p>Chargement en cours...</p>
-            </div>
-          ) : voyages.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              <p>Aucun élément enregistré</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {voyages.map((item) => (
-                <Card key={item.id} className="border shadow-sm">
-                  <CardContent className="p-4">
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-start">
-                        <Badge variant={
-                          item.type === 'voyage' ? 'default' : 
-                          item.type === 'sejour' ? 'secondary' : 'destructive'
-                        }>
-                          {item.type}
-                        </Badge>
-                        <Badge variant={item.categorie === 'premium' ? 'default' : 'outline'}>
-                          {item.categorie}
-                        </Badge>
-                      </div>
-                      
-                      {/* Informations spécifiques */}
-                      {item.type === 'voyage' && (
-                        <div>
-                          <h3 className="font-bold text-lg">
-                            {item.départ} → {item.destination}
-                          </h3>
-                          {item.typeVoyage === 'aller-retour' && (
-                            <Badge variant="outline" className="mt-1">
-                              Aller-Retour
-                            </Badge>
-                          )}
-                          <div className="text-sm space-y-1 mt-2">
-                            <p><strong>Départ:</strong> {item.dateDepart} à {item.heureDepart}</p>
-                            {item.typeVoyage === 'aller-retour' && (
-                              <p><strong>Retour:</strong> {item.dateRetour} à {item.heureRetour}</p>
-                            )}
-                            <p><strong>Transport:</strong> {item.moyenTransport}</p>
-                          </div>
-                        </div>
-                      )}
-                      
-                      {item.type === 'sejour' && (
-                        <div>
-                          <h3 className="font-bold text-lg">{item.hotel}</h3>
-                          <div className="text-sm space-y-1">
-                            {item.duree && <p><strong>Durée:</strong> {item.duree} jours</p>}
-                            {/* Affichage des nouveaux champs pour séjours */}
-                            {item.départSejour && <p><strong>Départ:</strong> {item.départSejour}</p>}
-                            {item.destinationSejour && <p><strong>Destination:</strong> {item.destinationSejour}</p>}
-                            {item.dateDepartSejour && <p><strong>Date de départ:</strong> {item.dateDepartSejour}</p>}
-                          </div>
-                          
-                          {item.activites && item.activites.length > 0 && (
-                            <div className="mt-2">
-                              <p className="font-medium">Activités:</p>
-                              <div className="flex flex-wrap gap-1 mt-1">
-                                {item.activites.map((act, i) => (
-                                  <Badge key={i} variant="outline" className="text-xs">
-                                    {act}
-                                  </Badge>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                      
-                      {item.type === 'evenement' && (
-                        <div>
-                          <h3 className="font-bold text-lg">{item.titre}</h3>
-                          <p className="text-gray-600 text-sm">{item.description}</p>
-                          <div className="text-sm space-y-1">
-                            <p><strong>Lieu:</strong> {item.lieu}</p>
-                            <p><strong>Organisateur:</strong> {item.organisateur}</p>
-                            <p><strong>Date:</strong> {item.dateEvent} à {item.heureEvent}</p>
-                            <p><strong>Départ:</strong> {item.départEvent}</p>
-                            <p><strong>Destination:</strong> {item.destinationEvent}</p>
-                            <p><strong>Transport:</strong> {item.moyenTransportEvent}</p>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Informations communes */}
-                      <div className="text-sm mt-2">
-                        <p><strong>Prix:</strong> {item.prix} €</p>
-                        <p><strong>Places:</strong> {item.places}</p>
-                      </div>
-
-                      {/* Options */}
-                      {item.options && Object.values(item.options).some(v => v) && (
-                        <div className="flex flex-wrap gap-1 mt-2">
-                          {Object.entries(item.options)
-                            .filter(([_, value]) => value)
-                            .map(([key, _]) => (
-                              <Badge key={key} variant="outline" className="text-xs">
-                                {key === 'wifi' ? 'Wi-Fi' : key}
-                              </Badge>
-                            ))}
-                        </div>
-                      )}
-
-                      <div className="flex flex-wrap gap-2 pt-3">
-                        <Button 
-                          size="sm" 
-                          onClick={() => handlePublish(item.id)} 
-                          className="bg-green-600 hover:bg-green-700"
-                        >
-                          <Eye className="mr-1 h-3 w-3" />
-                          Publier
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          onClick={() => handleEdit(item)}
-                        >
-                          <Edit className="mr-1 h-3 w-3" />
-                          Modifier
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="destructive"
-                          onClick={() => handleDelete(item.id)}
-                        >
-                          <Trash2 className="mr-1 h-3 w-3" />
-                          Supprimer
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      {/* Liste des éléments - Utilisation du composant VoyageList */}
+      <VoyageList
+        voyages={voyages}
+        loading={loading}
+        handlePublish={handlePublish}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+      />
 
       <div className="mt-8 text-center">
         <Button 

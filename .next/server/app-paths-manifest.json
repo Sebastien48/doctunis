@@ -1,12 +1,6 @@
 {
-  "/api/user/route": "app/api/user/route.js",
-  "/api/connexion/route": "app/api/connexion/route.js",
+  "/api/voyage/route": "app/api/voyage/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/api/utilisateurs/route": "app/api/utilisateurs/route.js",
-  "/page": "app/page.js",
-  "/admin/utilisateurs/page": "app/admin/utilisateurs/page.js",
-  "/admin/page": "app/admin/page.js",
-  "/connexion/page": "app/connexion/page.js",
-  "/admin/voyagesavenir/page": "app/admin/voyagesavenir/page.js",
-  "/dashboard/page": "app/dashboard/page.js"
+  "/admin/voyagesavenir/page": "app/admin/voyagesavenir/page.js"
 }

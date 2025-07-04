@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Mail, Phone } from 'lucide-react';
 
@@ -9,8 +9,12 @@ export default function ResetPasswordPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    //nomalement c'est dans le backend on faire plusieurs choses 
     // Ajoutez ici la logique pour envoyer l'email ou le SMS de réinitialisation
     // Redirection après succès
+    
+
     router.push('/connexion'); // Exemple de redirection
   };
 

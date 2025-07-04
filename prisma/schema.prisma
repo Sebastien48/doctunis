@@ -38,36 +38,50 @@ model utilisateurs {
 }
 
 model Voyage {
-  id               Int      @id @default(autoincrement())
-  type             String   // Type de voyage (voyage, séjour, événement)
-  titre            String   @db.VarChar(255)
+  id               Int       @id @default(autoincrement())
+  type             String
+  typeVoyage       String?
   description      String?
   prix             Float
-  placesDisponible Int
-  image            String?  // Chemin d'accès ou URL de l'image
-  départ           String   @db.VarChar(100)
-  destination      String   @db.VarChar(100)
-  date             DateTime // Date principale (départ ou événement)
-  heure            String?  @db.VarChar(5) // Format HH:mm
-  dateFinSejour    DateTime? // Pour les séjours
-  categorie        String   @db.VarChar(50) // économique, normale, premium
-  moyensTransport  String   @db.VarChar(100)
-  published        Boolean  @default(false)
-  
-  // Pour les événements
-  lieu             String?  @db.VarChar(255)
-  organisateur     String?  @db.VarChar(255)
-  
-  // Pour les séjours
-  hotel            String?  @db.VarChar(255)
-  activites        String?  // Stocké en JSON ou liste séparée par des virgules
-  
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  placesDisponible Int 
+  image            String?   // URL ou chemin
+  départ           String    @db.VarChar(100)
+  destination      String ?   @db.VarChar(100)
+  date             DateTime?
+  heure            String?   @db.VarChar(5)
+  dateRetour       DateTime?
+  heureRetour      String?   @db.VarChar(5)
+  dateFinSejour    DateTime?
+  duree            Int?
+  categorie        String    @db.VarChar(50)
+  options          Json?
+  moyensTransport  String ?    @db.VarChar(100)
+  published        Boolean   @default(false)
+  heureDepart      String?   @db.VarChar(5)
 
-  // Relations
+  // Champs spécifiques aux séjours
+  hotel            String?   @db.VarChar(255)
+  départSejour     String?   @db.VarChar(100)
+  destinationSejour String?  @db.VarChar(100)
+  dateDepartSejour DateTime?
+
+  // Champs spécifiques aux événements
+  titre            String?   @db.VarChar(255)
+  lieu             String?   @db.VarChar(255)
+  organisateur     String?   @db.VarChar(255)
+  dateEvent        DateTime?
+  heureEvent       String?   @db.VarChar(5)
+  départEvent      String?   @db.VarChar(100)
+  destinationEvent String?   @db.VarChar(100)
+  moyenTransportEvent String? @db.VarChar(100)
+
+  activites        Json
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
   reservations     Reservation[]
 }
+
 
 model Reservation {
   id              Int           @id @default(autoincrement())

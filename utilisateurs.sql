@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3307
--- Généré le : sam. 14 juin 2025 à 01:10
+-- Généré le : sam. 28 juin 2025 à 09:27
 -- Version du serveur : 11.5.2-MariaDB
 -- Version de PHP : 8.3.14
 
@@ -41,17 +41,18 @@ CREATE TABLE IF NOT EXISTS `utilisateurs` (
   `deletedAt` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `utilisateurs_email_key` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `utilisateurs`
 --
 
 INSERT INTO `utilisateurs` (`id`, `nom`, `prenom`, `email`, `telephone`, `mot_de_passe`, `role`, `createdAt`, `updatedAt`, `deletedAt`) VALUES
-(1, 'Jean', 'Dupont', 'jean@example.com', '+33612345678', 'secret123', 'utilisateur', '2025-06-13 10:13:59.479', '2025-06-13 10:13:59.479', NULL),
-(2, 'vianney', 'kouadio', 'karnouvianney@gmail.com', '555107312', '$2b$10$fSVF4D1VbHk5.QlyZ9.SN.v1a.6m2oAtItQFb.lbrukg0FC8YEo.2', 'utilisateur', '2025-06-13 10:27:48.182', '2025-06-13 10:27:48.182', NULL),
-(3, 'medard', 'kouadio', 'vianney@gmail.com', '+225 04 78 4501', '$2b$10$ZTN.rlvmAg6sYjEe5CMFgOvtcnwGd2vW7WhjfbyOnL8.eHSG1.rPi', 'admin', '2025-06-13 11:53:08.807', '2025-06-13 11:53:08.807', NULL),
-(4, 'santos ', 'bertrand francois', 'santosfrancois@gmail.com', '+33 45569658', '$2b$10$NP.xcYakwPwZCZq7WF8kMeAJU7Ebk62AXcqdSb/fTsXFS8.ATdkVa', 'utilisateur', '2025-06-13 12:00:25.276', '2025-06-13 12:00:25.276', NULL);
+(6, 'santos ', 'françois', 'santosfrancois@gmail.com', '+1 100785525', '$2b$10$tcRBA7eJtd.XraUt/AooKuLXvFjZvs6zFE78i42YI3q2IF0DkQWeG', 'utilisateur', '2025-06-25 18:27:40.549', '2025-06-25 18:27:40.549', NULL),
+(2, 'david', 'karnou', 'karnou@gmail.com', '+225 0555330393', '$2b$10$/uXq5lE3O8q9vUIudDRi0O9vf/R0orB/rn7dTutGSd16bYaP.UJ4S', 'utilisateur', '2025-06-14 02:27:32.494', '2025-06-14 02:27:32.494', NULL),
+(3, 'david', 'jean françois', 'david@gmail.com', '0555330393', '$2b$10$HMLRcv5wTcBGRyOyFGXbeee9Zc2RI8nlZoDgrNcKl6y4mqYpkI6PO', 'utilisateur', '2025-06-14 02:29:09.338', '2025-06-14 02:29:09.338', NULL),
+(4, 'vianney', 'kouadio', 'vianney@gmail.com', '555107312', '$2b$10$ToGiM.YoN/FZ5rjzZTF8web.ZHa6hzOBvw/yGnXgtir8hrG5bjq0i', 'admin', '2025-06-14 02:32:20.712', '2025-06-14 02:32:20.712', NULL),
+(5, 'naruto', 'kurosaki', 'karnouvianney@gmail.com', '+1 100785525', '$2b$10$EnjMj8khWuadctrmQmD0RuWK35WW9.rjj/QZu00fgw7sCvfmjDlzK', 'utilisateur', '2025-06-16 16:25:46.024', '2025-06-16 16:25:46.024', NULL);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

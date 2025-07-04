@@ -21,6 +21,12 @@ export default function Colis() {
     heure: "",
     moyensTransport: [],
   });
+  const VILLES = [
+  "Dakar", "Thiès", "Saint-Louis", "Ziguinchor", "Kaolack",
+  "Tambacounda", "Kolda", "Matam", "Kaffrine", "Fatick",
+  "Louga", "Sédhiou", "Kédougou", "Diourbel", "Richard Toll",
+  "Mbour", "Touba", "Mbacké", "Joal-Fadiouth", "Bignona"
+];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -180,19 +186,37 @@ export default function Colis() {
                 <option value="bateau">Bateau</option>
                 <option value="avion">Avion</option>
               </select>
-              <p className="text-sm text-gray-500">Utilisez Ctrl (ou Cmd sur Mac) pour en sélectionner plusieurs.</p>
+        
             </div>
 
             <div>
               <Label htmlFor="depart">Ville de départ</Label>
-              <Input
+                <select
+                id="départ"
+                
+                value={formData.depart}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    depart: Array.from(
+                      e.target.selectedOptions,
+                      (option) => option.value
+                    ),
+                  })
+                }
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 h-10"
+              >
+                <option value="">Selectionner une ville</option>
+                {VILLES.map(ville=>(<option value={VILLES}key={VILLES}>{VILLES}</option>))}
+              </select>
+             {/* <Input
                 id="depart"
                 value={formData.depart}
                 onChange={(e) =>
                   setFormData({ ...formData, depart: e.target.value })
                 }
                 required
-              />
+              /> */}
             </div>
             <div>
               <Label htmlFor="destination">Ville de destination</Label>

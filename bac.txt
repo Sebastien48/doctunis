@@ -1,0 +1,291 @@
+// /api/voyage/route.js (Next.js 13+ App Router)
+import { NextRequest, NextResponse } from 'next/server';
+import { writeFile, mkdir } from 'fs/promises';
+import { join } from 'path';
+import { v4 as uuidv4 } from 'uuid';
+
+// Simulation d'une base de données en mémoire
+// En production, utilisez une vraie base de données (PostgreSQL, MongoDB, etc.)
+let voyagesDB = [];
+
+// Fonction utilitaire pour sauvegarder l'image
+async function saveImage(imageFile) {
+  if (!imageFile) return null;
+
+  try {
+    const bytes = await imageFile.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+    
+    // Créer le dossier uploads s'il n'existe pas
+    const uploadDir = join(process.cwd(), 'public', 'uploads');
+    await mkdir(uploadDir, { recursive: true });
+    
+    // Générer un nom unique pour l'image
+    const fileExtension = imageFile.name.split('.').pop();
+    const fileName = `${uuidv4()}.${fileExtension}`;
+    const filePath = join(uploadDir, fileName);
+    
+    // Sauvegarder l'image
+    await writeFile(filePath, buffer);
+    
+    return `/uploads/${fileName}`;
+  } catch (error) {
+    console.error('Erreur lors de la sauvegarde de l\'image:', error);
+    return null;
+  }
+}
+
+// Fonction de validation des données
+function validateVoyageData(data, type) {
+  const errors = [];
+  
+  // Validation des champs communs
+  if (!data.prix || isNaN(data.prix) || parseFloat(data.prix) <= 0) {
+    errors.push('Prix invalide');
+  }
+  
+  if (!data.places || isNaN(data.places) || parseInt(data.places) <= 0) {
+    errors.push('Nombre de places invalide');
+  }
+  
+  // Validation spécifique par type
+  switch (type) {
+    case 'voyage':
+      if (!data.départ) errors.push('Départ requis');
+      if (!data.destination) errors.push('Destination requise');
+      if (!data.dateDepart) errors.push('Date de départ requise');
+      if (!data.heureDepart) errors.push('Heure de départ requise');
+      if (!data.moyenTransport) errors.push('Moyen de transport requis');
+      if (!data.categorie) errors.push('Catégorie requise');
+      
+      // Validation pour aller-retour
+      if (data.typeVoyage === 'aller-retour') {
+        if (!data.dateRetour) errors.push('Date de retour requise pour aller-retour');
+        if (!data.heureRetour) errors.push('Heure de retour requise pour aller-retour');
+      }
+      break;
+      
+    case 'sejour':
+      if (!data.hotel) errors.push('Hôtel requis');
+      if (!data.départSejour) errors.push('Départ requis pour séjour');
+      if (!data.destinationSejour) errors.push('Destination requise pour séjour');
+      if (!data.dateDepartSejour) errors.push('Date de départ requise pour séjour');
+      if (!data.categorie) errors.push('Catégorie requise');
+      break;
+      
+    case 'evenement':
+      if (!data.titre) errors.push('Titre requis');
+      if (!data.lieu) errors.push('Lieu requis');
+      if (!data.organisateur) errors.push('Organisateur requis');
+      if (!data.dateEvent) errors.push('Date de l\'événement requise');
+      if (!data.heureEvent) errors.push('Heure de l\'événement requise');
+      if (!data.départEvent) errors.push('Départ requis pour événement');
+      if (!data.destinationEvent) errors.push('Destination requise pour événement');
+      if (!data.moyenTransportEvent) errors.push('Moyen de transport requis pour événement');
+      break;
+      
+    default:
+      errors.push('Type invalide');
+  }
+  
+  return errors;
+}
+
+// Fonction pour créer un objet voyage/séjour/événement
+function createVoyageObject(formData, imagePath = null) {
+  const baseObject = {
+    id: uuidv4(),
+    type: formData.get('type'),
+    prix: parseFloat(formData.get('prix')),
+    places: parseInt(formData.get('places')),
+    categorie: formData.get('categorie') || 'normale',
+    options: JSON.parse(formData.get('options') || '{}'),
+    image: imagePath,
+    createdAt: new Date().toISOString(),
+    published: false
+  };
+  
+  // Ajout des champs spécifiques selon le type
+  switch (baseObject.type) {
+    case 'voyage':
+      return {
+        ...baseObject,
+        départ: formData.get('départ'),
+        destination: formData.get('destination'),
+        dateDepart: formData.get('dateDepart'),
+        heureDepart: formData.get('heureDepart'),
+        typeVoyage: formData.get('typeVoyage') || 'aller-simple',
+        dateRetour: formData.get('dateRetour') || null,
+        heureRetour: formData.get('heureRetour') || null,
+        moyenTransport: formData.get('moyenTransport')
+      };
+      
+    case 'sejour':
+      return {
+        ...baseObject,
+        hotel: formData.get('hotel'),
+        duree: formData.get('duree') ? parseInt(formData.get('duree')) : null,
+        activites: JSON.parse(formData.get('activites') || '[]'),
+        départSejour: formData.get('départSejour'),
+        destinationSejour: formData.get('destinationSejour'),
+        dateDepartSejour: formData.get('dateDepartSejour')
+      };
+      
+    case 'evenement':
+      return {
+        ...baseObject,
+        titre: formData.get('titre'),
+        description: formData.get('description') || '',
+        lieu: formData.get('lieu'),
+        dateEvent: formData.get('dateEvent'),
+        heureEvent: formData.get('heureEvent'),
+        organisateur: formData.get('organisateur'),
+        départEvent: formData.get('départEvent'),
+        destinationEvent: formData.get('destinationEvent'),
+        moyenTransportEvent: formData.get('moyenTransportEvent')
+      };
+      
+    default:
+      return baseObject;
+  }
+}
+
+// GET - Récupérer tous les voyages/séjours/événements
+export async function GET(request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const type = searchParams.get('type'); // Filtrer par type si spécifié
+    const published = searchParams.get('published'); // Filtrer par statut de publication
+    
+    let filteredVoyages = voyagesDB;
+    
+    // Filtrage par type
+    if (type && ['voyage', 'sejour', 'evenement'].includes(type)) {
+      filteredVoyages = filteredVoyages.filter(item => item.type === type);
+    }
+    
+    // Filtrage par statut de publication
+    if (published !== null) {
+      const isPublished = published === 'true';
+      filteredVoyages = filteredVoyages.filter(item => item.published === isPublished);
+    }
+    
+    // Tri par date de création (plus récent en premier)
+    filteredVoyages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    
+    return NextResponse.json(filteredVoyages, { status: 200 });
+    
+  } catch (error) {
+    console.error('Erreur lors de la récupération:', error);
+    return NextResponse.json(
+      { error: 'Erreur serveur lors de la récupération des données' },
+      { status: 500 }
+    );
+  }
+}
+
+// POST - Créer un nouveau voyage/séjour/événement
+export async function POST(request) {
+  try {
+    const formData = await request.formData();
+    const type = formData.get('type');
+    
+    // Validation du type
+    if (!['voyage', 'sejour', 'evenement'].includes(type)) {
+      return NextResponse.json(
+        { error: 'Type invalide. Doit être voyage, sejour ou evenement' },
+        { status: 400 }
+      );
+    }
+    
+    // Conversion des données du formulaire en objet pour validation
+    const dataForValidation = {};
+    for (const [key, value] of formData.entries()) {
+      if (key !== 'image') {
+        dataForValidation[key] = value;
+      }
+    }
+    
+    // Validation des données
+    const validationErrors = validateVoyageData(dataForValidation, type);
+    if (validationErrors.length > 0) {
+      return NextResponse.json(
+        { error: 'Données invalides', details: validationErrors },
+        { status: 400 }
+      );
+    }
+    
+    // Traitement de l'image
+    const imageFile = formData.get('image');
+    let imagePath = null;
+    
+    if (imageFile && imageFile.size > 0) {
+      // Validation de l'image (taille, type)
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+      
+      if (imageFile.size > maxSize) {
+        return NextResponse.json(
+          { error: 'Image trop volumineuse (max 5MB)' },
+          { status: 400 }
+        );
+      }
+      
+      if (!allowedTypes.includes(imageFile.type)) {
+        return NextResponse.json(
+          { error: 'Type d\'image non supporté (JPEG, PNG, WebP uniquement)' },
+          { status: 400 }
+        );
+      }
+      
+      imagePath = await saveImage(imageFile);
+      if (!imagePath) {
+        return NextResponse.json(
+          { error: 'Erreur lors de la sauvegarde de l\'image' },
+          { status: 500 }
+        );
+      }
+    }
+    
+    // Création de l'objet
+    const newItem = createVoyageObject(formData, imagePath);
+    
+    // Ajout à la "base de données"
+    voyagesDB.push(newItem);
+    
+    // Log pour débogage
+    console.log(`Nouveau ${type} créé:`, {
+      id: newItem.id,
+      type: newItem.type,
+      prix: newItem.prix,
+      places: newItem.places
+    });
+    
+    return NextResponse.json(
+      { 
+        message: `${type.charAt(0).toUpperCase() + type.slice(1)} créé avec succès`,
+        data: newItem
+      },
+      { status: 201 }
+    );
+    
+  } catch (error) {
+    console.error('Erreur lors de la création:', error);
+    return NextResponse.json(
+      { error: 'Erreur serveur lors de la création' },
+      { status: 500 }
+    );
+  }
+}
+
+// Fonction utilitaire pour obtenir des statistiques
+export async function getStats() {
+  return {
+    total: voyagesDB.length,
+    voyages: voyagesDB.filter(item => item.type === 'voyage').length,
+    sejours: voyagesDB.filter(item => item.type === 'sejour').length,
+    evenements: voyagesDB.filter(item => item.type === 'evenement').length,
+    published: voyagesDB.filter(item => item.published).length,
+    draft: voyagesDB.filter(item => !item.published).length
+  };
+}
